@@ -1,0 +1,178 @@
+function [x,YM,YPM]=getEigenfunction(system,md,E,multiplicity)
+%computes the eigenfunctions and their first order derivatives corresponding
+% to the eigenvalue E in the meshpoints of the mesh given by the input argument md.
+%OUTPUT:    x : vector of x-values (=meshpoints) where the eigenfunctions were evaluated
+%           YM: 3-dim matrix (n times nsteps times multiplicity)
+%               contains information on the eigenfunctions                
+%               YM(i,j,k) = i'th element (1<=i<=dimension of the system) in
+%               the k'th eigenfunction evaluated in the jth meshpoint .
+%               Each YM(:,:,k) with ( 1<= k <= multiplicity ) represents an
+%               eigenfunction.
+%           YMP: similar for the first order derivatives
+
+%NOTE: the eigenfunction and its derivative are only evaluated in the
+%meshpoints (the values of these points are returned by the function 
+%getEigenfunction in the vector x). This may not be sufficient to produce a
+%nice smooth plot of a higher eigenfunction. The evaluation of the
+%eigenfunctions in user specified points is future work.
+
+%left hand part
+PsiL=system.A2/system.A1;
+Y(:,:,1) = system.A2;
+neq = size(system.A1,1);
+PsiLe=zeros(neq,neq);
+YPL=system.A1;
+YP(:,:,1)=YPL;
+[Tm,Te]=getTransferMatrices(E,md,6); 
+for k=1:md.matchingIndex
+    u=Tm(1:neq,1:neq,k);   v=Tm(1:neq,neq+1:neq*2,k);
+    up=Tm(neq+1:neq*2,1:neq,k); vp=Tm(neq+1:neq*2,neq+1:neq*2,k);
+    ue=Te(1:neq,1:neq,k);   ve=Te(1:neq,neq+1:neq*2,k);
+    upe=Te(neq+1:neq*2,1:neq,k); vpe=Te(neq+1:neq*2,neq+1:neq*2,k);
+    Psi0=PsiL;
+    PsiL=(u*PsiL+v)/(up*PsiL+vp);
+    PsiLe=(ve+ue*Psi0+u*PsiLe)/(up*Psi0+vp)-PsiL*(vpe+upe*Psi0+up*PsiLe)/(up*Psi0+vp);
+    YPL = (up*Psi0+vp)*YPL;
+    Y(:,:,k+1)= PsiL*YPL;
+    YP(:,:,k+1)=YPL;
+end
+
+%right hand part
+PsiR=system.B2/system.B1;
+Y(:,:,length(md.h)+1) = system.B2;
+PsiRe=zeros(neq,neq);
+YPR=system.B1;
+YP(:,:,length(md.h)+1)=YPL;
+for k=length(md.h):-1:md.matchingIndex+1
+    u=Tm(1:neq,1:neq,k);   v=Tm(1:neq,neq+1:neq*2,k);
+    up=Tm(neq+1:neq*2,1:neq,k);   vp=Tm(neq+1:neq*2,neq+1:neq*2,k);
+    ue=Te(1:neq,1:neq,k);   ve=Te(1:neq,neq+1:neq*2,k);
+    upe=Te(neq+1:neq*2,1:neq,k); vpe=Te(neq+1:neq*2,neq+1:neq*2,k);
+    Psi0=PsiR;
+    PsiR=(vp'*PsiR-v')/(-up'*PsiR+u');
+    PsiRe=(vpe'*Psi0+vp'*PsiRe-ve')/(-up'*Psi0+u')-PsiR*(-upe'*Psi0-up'*PsiRe+ue')/(-up'*Psi0+u'); 
+    YPR = (-up'*Psi0+u')*YPR;
+    Y(:,:,k)= PsiR*YPR;
+    YP(:,:,k)=YPR;
+end
+
+[VL,D]=eig(YPR'*PsiL*YPL-(PsiR*YPR)'*YPL); 
+[VR,D2]=eig((YPR'*PsiL*YPL-(PsiR*YPR)'*YPL)');
+%determine the set of vectors v_L^j and v_R^j
+d=abs(diag(D));
+d2=abs(diag(D2));
+for j=1:multiplicity
+   [e,i ]=min(d);
+   vl(:,j)=VL(:,i); 
+   d(i)=max(d)+10;
+   [e,i ]=min(d2);
+   vr(:,j)=VR(:,i);
+   d2(i)=max(d2)+10;
+end
+ZL=[PsiL*YPL*vl;YPL*vl];
+ZR=[PsiR*YPR*vr;YPR*vr];
+%eerste kolom ZL = ZR*eerste kolom A'
+for j=1:multiplicity
+  AT(:,j)=ZR\ZL(:,j); 
+end
+N1=YPL'*PsiLe*YPL;
+N2=-YPR'*PsiRe*YPR;
+YM=zeros(neq,length(md.h)+1,multiplicity);
+YPM=zeros(neq,length(md.h)+1,multiplicity);
+for j=1:multiplicity
+  vrt=AT'*vr(:,j);
+  vlt=vl(:,j);
+  fnorm = sqrt(vlt'*N1*vlt+vrt'*N2*vrt);
+  for i=1:md.matchingIndex
+    YM(:,i,j)=(Y(:,:,i)*vlt)./fnorm;
+    YPM(:,i,j)=(YP(:,:,i)*vlt)./fnorm;
+  end
+  for i=md.matchingIndex+1:length(md.h)+1
+    YM(:,i,j)=(Y(:,:,i)*vrt)./fnorm;
+    YPM(:,i,j)=(YP(:,:,i)*vrt)./fnorm;
+  end
+end
+x=[0 cumsum(md.h)];
+
+
+
+
+% function [Y,YP]=getEigenfunction(system,md,E)
+% PsiL=system.A2/system.A1;
+% Y(:,:,1) = system.A2;
+% P(:,:,1)=PsiL;
+% neq = size(system.A1,1);
+% PsiLe=zeros(neq,neq);
+% YPL=system.A1;
+% ql=YPL'*PsiLe*YPL;
+% Z(:,:,1)=YPL;
+% neq = size(system.A1,1);
+% [Tm,Te]=getTransferMatrices(E,md,6); 
+% md.matchingIndex=10
+% for k=1:md.matchingIndex
+%     u=Tm(1:neq,1:neq,k);   v=Tm(1:neq,neq+1:neq*2,k);
+%     up=Tm(neq+1:neq*2,1:neq,k); vp=Tm(neq+1:neq*2,neq+1:neq*2,k);
+%     ue=Te(1:neq,1:neq,k);   ve=Te(1:neq,neq+1:neq*2,k);
+%     upe=Te(neq+1:neq*2,1:neq,k); vpe=Te(neq+1:neq*2,neq+1:neq*2,k);
+%     Psi0=PsiL;
+%     PsiL=(u*PsiL+v)/(up*PsiL+vp);
+%     PsiLe=(ve+ue*Psi0+u*PsiLe)/(up*Psi0+vp)-PsiL*(vpe+upe*Psi0+up*PsiLe)/(up*Psi0+vp);
+%     YPL = (up*Psi0+vp)*YPL;
+%     Y(:,:,k+1)= PsiL*YPL;
+%     P(:,:,k+1)=PsiL;
+%     Z(:,:,k+1)=YPL;
+% end
+% ql=YPL'*PsiLe*YPL-ql
+% figure
+% res=reshape(Y(1,1,:),1,length(Y(1,1,:)));
+% plot(1:length(res),res)
+% 
+% 
+% PsiR=system.B2/system.B1;
+% Y(:,:,length(md.h)+1) = system.B2;
+% P(:,:,length(md.h)+1)=PsiR;
+% PsiRe=zeros(neq,neq);
+% YPR=system.B1;
+% Z(:,:,length(md.h)+1)=YPL;
+% qr=YPR'*PsiRe*YPR;
+% for k=length(md.h):-1:md.matchingIndex+1
+%     u=Tm(1:neq,1:neq,k);   v=Tm(1:neq,neq+1:neq*2,k);
+%     up=Tm(neq+1:neq*2,1:neq,k);   vp=Tm(neq+1:neq*2,neq+1:neq*2,k);
+%     ue=Te(1:neq,1:neq,k);   ve=Te(1:neq,neq+1:neq*2,k);
+%     upe=Te(neq+1:neq*2,1:neq,k); vpe=Te(neq+1:neq*2,neq+1:neq*2,k);
+%     Psi0=PsiR;
+%     PsiR=(vp'*PsiR-v')/(-up'*PsiR+u');
+%     PsiRe=(vpe'*Psi0+vp'*PsiRe-ve')/(-up'*Psi0+u')-PsiR*(-upe'*Psi0-up'*PsiRe+ue')/(-up'*Psi0+u'); 
+%     YPR = (-up'*Psi0+u')*YPR;
+%     Y(:,:,k)= PsiR*YPR;
+%     P(:,:,k)=PsiR;
+%     Z(:,:,k)=YPR;
+% end
+% qr=YPR'*PsiRe*YPR-qr
+% gap=1 %?
+% fnorm=sqrt(abs(qr(1)+gap*ql(1))); %?
+% figure
+% res=reshape(Y(1,1,:),1,length(Y(1,1,:)));
+% plot([0 cumsum(md.h)],res)
+% figure
+% res=reshape(Y(1,1,:),1,length(Y(1,1,:)));
+% plot([0 cumsum(md.h)],res./fnorm)
+% figure
+% res=reshape(P(1,1,:),1,length(Y(1,1,:)));
+% plot([0 cumsum(md.h)],res)
+% figure
+% res=reshape(Z(1,1,:),1,length(Y(1,1,:)));
+% plot([0 cumsum(md.h)],res)
+
+% for k=length(md.h):-1:matchingIndex+1
+%     u=Tm(1:neq,1:neq,k);   v=Tm(1:neq,neq+1:neq*2,k);
+%     up=Tm(neq+1:neq*2,1:neq,k);   vp=Tm(neq+1:neq*2,neq+1:neq*2,k);
+%     ue=Te(1:neq,1:neq,k);   ve=Te(1:neq,neq+1:neq*2,k);
+%     upe=Te(neq+1:neq*2,1:neq,k); vpe=Te(neq+1:neq*2,neq+1:neq*2,k);
+%     Psi0=PsiR;
+% %      y0=y;
+% %      y=vp'*y-v'*yp;
+% %      yp=-up'*y0+u'*yp;
+%     PsiR=(vp'*PsiR-v')/(-up'*PsiR+u');
+%     PsiRe=(vpe'*Psi0+vp'*PsiRe-ve')/(-up'*Psi0+u')-PsiR*(-upe'*Psi0-up'*PsiRe+ue')/(-up'*Psi0+u'); 
+% end
