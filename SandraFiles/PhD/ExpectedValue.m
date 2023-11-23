@@ -49,20 +49,13 @@ Yf=Wf(:,:,f)
 %The length of the wavefunction f 
 [numRf,numCf] = size(Yf);
 
-
-%Now we normalize the wavefunctions
-Yi_n= Yi/norm(Yi);
-Yf_n = Yf/norm(Yf);
- %He de normalitzar la x, crec q o
-
-
 %numRi=numRf and numCi=numCf
 V=zeros(numRi,numRf);
 for N=1:numRi
     %Muliply each row for any row of the other wavefunction normalized
     for M=1:numRf
-        Yi_f=Yi_n(N,:); %row vector
-        Yf_f=Yf_n(M,:); %row vector
+        Yi_f=Yi(N,:); %row vector
+        Yf_f=Yf(M,:); %row vector
 
         %With out wavefunctions computed now we multiply for our operator
         %(matrix) Yf*Op*Yi
