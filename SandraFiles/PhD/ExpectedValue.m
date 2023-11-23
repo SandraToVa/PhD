@@ -50,12 +50,6 @@ Yf=Wf(:,:,f)
 [numRf,numCf] = size(Yf);
 
 
-%Now we normalize the wavefunctions
-Yi_n= Yi/norm(Yi);
-Yf_n = Yf/norm(Yf);
- %He de normalitzar la x, crec q o
-
-
 %numRi=numRf and numCi=numCf
 V=zeros(numRi,numRf);
 for N=1:numRi
