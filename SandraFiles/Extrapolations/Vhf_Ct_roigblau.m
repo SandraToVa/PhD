@@ -1,13 +1,13 @@
 %Valor r0
-setr0(3.964)
+setr0(3.5)
 %Constants ajustades
-setk1(0)
-setk2(0)
+setk1(0.1509)
+setk2(-0.0015)
 %Valors Lambda g
 setL1(0.07965)
 setL3(0.3105)
 % l= interpolació (0), llagures distncies (1), bad long distances (else)
-setl(1)
+setl(0)
 %massa
 load("dades.mat","m_c","m_b")
 setm_q(m_c)

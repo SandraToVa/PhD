@@ -1,10 +1,13 @@
 %Valor r0
-setr0(3.964)
+setr0(3.5)
 setL1(0.07965)
 setL3(0.3105)
 load("dades.mat","m_c","m_b")
 setm_q(m_c)
 setspin(1)
+% l= interpolació (0), llagures distncies (1), bad long distances (else)
+setl(0)
+
 %Ajust amb els etsats rojos (1-4) i amb els blaus (5-14)
 
 %Totes les E en GeV
@@ -47,58 +50,58 @@ I1=1;
 I2=1;
 results(I1,I2)=0;
 %Programa que busca la k òptima per a la chi^2
-for ka1=0.142:0.0001:0.144
-    setk1(ka1);
+for ka1=0.17:0.001:0.19
+    setk1(ka1); 
     I2=1;
-    for ka2=0.0007:0.0001:0.0017
+    for ka2=-0.001:0.001:0.002
         setk2(ka2);
         %Vector en los valors de la energia que necesito
         
-        [aux,W,x]=QuarkoniumS0J1(m_q,spin);
+        [aux,~,~]=QuarkoniumS0J1(m_q,spin);
         a(1)=aux(1);
-        [aux,W,x]=Spin1Jcal0_1(m_q,spin);
+        [aux,~,~]=Spin1Jcal0_1(m_q,spin);
         a(2)=aux(1);
-        [aux,W,x]=Spin1Jcal1_2(m_q,spin);
+        [aux,~,~]=Spin1Jcal1_2(m_q,spin);
         a(3)=aux(1);
-        [aux,W,x]=Spin1Jcal2_1(m_q,spin);
+        [aux,~,~]=Spin1Jcal2_1(m_q,spin);
         a(4)=aux(1);
-        [aux,W,x]=Spin1Jcal0_2(m_q,spin);
+        [aux,~,~]=Spin1Jcal0_2(m_q,spin);
         a(5)=aux(1);
-        [aux,W,x]=Spin1Jcal2_2(m_q,spin);
+        [aux,~,~]=Spin1Jcal2_2(m_q,spin);
         a(6)=aux(1);
-        [aux,W,x]=Spin1Jcal2_2(m_q,spin);
-        (7)=aux(2);
-        [aux,W,x]=QuarkoniumS0J0(m_q,spin);
+        [aux,~,~]=Spin1Jcal2_2(m_q,spin);
+        a(7)=aux(2);
+        [aux,~,~]=QuarkoniumS0J0(m_q,spin);
         a(8)=aux(1);
-        [aux,W,x]=Spin1Jcal1_1(m_q,spin);
+        [aux,~,~]=Spin1Jcal1_1(m_q,spin);
         a(9)=aux(1);
-        [aux,W,x]=Spin1Jcal1_1(m_q,spin);
+        [aux,~,~]=Spin1Jcal1_1(m_q,spin);
         a(10)=aux(2);
-        [aux,W,x]=Spin1Jcal1_1(m_q,spin);
+        [aux,~,~]=Spin1Jcal1_1(m_q,spin);
         if m_q==1.4702
              a(11)=aux(3); %If charmonium
         end
         if m_q==4.8802
            a(11)=aux(5); %If bottomium
         end
-        [aux,W,x]=QuarkoniumS0J1(m_q,spin);
+        [aux,~,~]=QuarkoniumS0J1(m_q,spin);
         a(12)=aux(2);
-        [aux,W,x]=QuarkoniumS0J2(m_q,spin);
+        [aux,~,~]=QuarkoniumS0J2(m_q,spin);
         a(13)=aux(1);
-        [aux,W,x]=Spin1Jcal3_1(m_q,spin);
+        [aux,~,~]=Spin1Jcal3_1(m_q,spin);
         a(14)=aux(1);
     
         chi=0;
         for i=1:14
             chi=chi+((a(i)-t(i))^2)/((e(i))^2);
         end
-        I2
+        disp(I2);
         results(I1,I2)=chi;
         I2=I2+1;
         
     end 
     
-    I1
+    disp(I1);
     I1=I1+1;
     
 end
@@ -121,15 +124,16 @@ v0=val0;
 end
 
 % VALOR DEL SPIN
-function x4=spin
-global v4
-x4=v4;
+function x7=spin
+global v7
+x7=v7;
 end 
 
-function setspin(val4)
-global v4
-v4 = val4;
+function setspin(val7)
+global v7
+v7 = val7;
 end
+
 
 
 
@@ -187,4 +191,17 @@ end
 function setL3(val5)
 global v5
 v5 = val5;
+end
+
+%Usant la interpolació o només les llargues distàncies
+%l=1; llargues distàncies
+%l=0; interpolació
+function x6=l
+global v6
+x6=v6;
+end
+
+function setl(val6)
+global v6
+v6=val6;
 end
