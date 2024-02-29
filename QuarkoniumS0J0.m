@@ -38,7 +38,9 @@ kmax=6;
 if s==0 %Quarkonium
     %number of actual states
     E=zeros(1,kmax+1);
-    tol0=5e-6;
+    tol0=3e-8; %for d quarkonium charm
+    %tol0=6e-7; %for d quarkonium bottom
+    %tol0=5e-6; %for s quarkonium
     [EigvData,meshData]=computeEigenvalues(system,0,kmax*3,tol0);
 
     for k=0:kmax
@@ -48,7 +50,8 @@ if s==0 %Quarkonium
 else 
     %number of actual states
     E=zeros(1,kmax+1);
-    tol1=5e-5;
+    tol1=5e-8;   %1.5e-6;
+    %For p0 to d quarkonium 1.5e-6 is x=81
     [EigvData,meshData]=computeEigenvalues(system,0,kmax*3,tol1); %ajust this tolerance
 
     for k=0:kmax

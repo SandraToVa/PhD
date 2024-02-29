@@ -31,16 +31,14 @@ system.V=@potentialMatrix;
 %disp(' ');
 %disp('Calculating eigenvalues with indices between 0 and 10:');0-3
 t=cputime;
-[EigvData,meshData]=computeEigenvalues(system,0,3,5e-7);
+[EigvData,meshData]=computeEigenvalues(system,0,5,5e-7);
 
 % disp(['Number of intervals in the mesh: ' num2str(length(meshData.h))]); % number of intervals in the mesh
 %[lam0]=parameters2
 % disp(['Time: ' num2str (cputime - t) ' sec']);
 % disp(sprintf('k \t  E_k \t\t\t\t ErrEst \t status'))
 
-if s==1
-    E=EigvData.eigenvalues/m;
-end
+E=EigvData.eigenvalues/m;
 
 %Matrix of wavefunctions W
 for i=1:length(EigvData.eigenvalues)
@@ -275,15 +273,19 @@ function f1=Vg(x)
 
   
   % EFECTES HIPERFINS:
-  
+  %Corregits!!
   function HFP=Vpp(x) 
    % Potencial V_pp
   [m]=parameters;
   
   if m==1.4702
-  HFP=(1.12155*L3*pi^2)/(m*0.187*r0^3);
+  cf=1.12155;
+  k=0.187;
+  HFP=(cf*L3*pi^2)/(m*k*r0^3);
   else
-  HFP=(0.87897*L3*pi^2)/(m*0.187*r0^3);
+  cf=0.87897;
+  k=0.187;
+  HFP=(cf*L3*pi^2)/(m*k*r0^3);
   end
   
   end
@@ -292,9 +294,13 @@ function f1=Vg(x)
   [m]=parameters;
  
   if m==1.4702
-  HFS=(1.12155*L1*pi^2)/(m*sqrt(pi*0.187)*r0^2);
+  cf=1.12155;
+  k=0.187;
+  HFS=(cf*L1*pi^2)/(m*sqrt(pi*k)*r0^2);
   else
-  HFS=(0.87897*L1*pi^2)/(m*sqrt(pi*0.187)*r0^2);
+  cf=0.87897;
+  k=0.187;
+  HFS=(cf*L1*pi^2)/(m*sqrt(pi*k)*r0^2);
   end
   
   end

@@ -49,11 +49,16 @@ Yf=Wf(:,:,f);
 %The length of the wavefunction f 
 [numRf,~] = size(Yf);
 
+if numRi ~= numRf
+    disp('Number of rows in wave functions not equal')
+end
+
 %If we work with quarkonium the wave functions only have on relevant row:
 %the first one
 if sin==0 && sfin ==0
     Yi_f=Yi(1,:); %row vector
     Yf_f=Yf(1,:); %row vector
+    
     V1=Yf_f*Op;
     V2=zeros(1,length(V1)); %row of zeros
     for el=1:length(V1)
@@ -117,58 +122,9 @@ if sin==1 && sfin==0
     
 end %end if
 
-%SHA DE MIRSAR EN
-%CONTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-%The same if initial is quarkonium and final is hyrbid
-
-if sin==0 && sfin==1
-    %If the initial states is quarkonium, (should be) numRi=3 but only the
-    %first row important
-    %If the final state is hybrid, (should be) numRi=2
-        
-    V=zeros(numRf,1);
-      
-    for M=1:numRf
-        %Muliply each row for any row of the other wavefunction normalized
-        
-        Yi_f=Yi(1,:); %row vector
-        Yf_f=Yf(M,:); %row vector
-
-        %The operator Op in this case is two elements, one for the upper row and
-        %one for the bottom row.
-        OpRow=Op(:,:,M);
-
-        %With out wavefunctions computed now we multiply for our operator
-        %(matrix) Yf*Op*Yi
-        %Auxiliar matrix(vector) for the first multiplication. It is a row
-        %vector
-        V1=Yf_f*OpRow;
-        %Now our second multiplication is for each element in V1 and each
-        %element in Yi
-        V2=zeros(1,length(V1)); %row of zeros
-        for el=1:length(V1)
-           %Second auxiliar vector a row vector. Final multiplication of the
-           %Yf*Op*Yi
-           V2(el)=V1(el)*Yi_f(el);
-        end
-        %The integrand is exactly V2
-        I=V2;
-        %We obtain a column resulting of the sandwitch of
-        %wavefunctionQ*Op[N]*wavefunctionH[N]
-
-        V(M,1)=trapz(x,I);  
-        
-    end %end for
-
-    %Then we should add the two results. But we do not do this here
 
 
-%Case Hybrid-Hybrid???????
-    
-end %end if
-
-
-end
+end %end function
 
 % VALOR DEL SPIN
 function x7=spin

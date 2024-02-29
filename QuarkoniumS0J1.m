@@ -25,7 +25,7 @@ system.V=@potentialMatrix;
 %disp(' ');
 %disp('Calculating eigenvalues with indices between 0 and 10:');
 t=cputime;
-kmax=6;
+kmax=7;
 
 
 % disp(['Number of intervals in the mesh: ' num2str(length(meshData.h))]); % number of intervals in the mesh
@@ -50,10 +50,10 @@ else %Hybrid
 
 end
 
-for i=1:length(E)
+for en=1:length(E)
     %disp(sprintf('%-3.0f\t %-16.12f\t %-2.0e\t\t % d', EigvData.indices(i),EigvData.eigenvalues(i)/m,EigvData.errorEstimations(i),EigvData.status(i)));
-    [x,Y,YP]=computeEigenfunction(system,meshData,E(i)*m,1);
-    W(:,:,i)=Y;
+    [x,Y,YP]=computeEigenfunction(system,meshData,E(en)*m,1);
+    W(:,:,en)=Y;
 end
 
 
@@ -164,6 +164,13 @@ if s==0
     r(3,3,i)=R(x(i),j); 
     r(1,2,i)=0;  
     r(2,1,i)=0;
+
+    % NO CANVIA
+    r(1,3,i)=0;
+    r(3,1,i)=0;
+    r(2,3,i)=0;
+    r(3,2,i)=0;
+
   
   end
 end
@@ -184,16 +191,17 @@ if s==1
       r(1,2,i)=B(x(i),j);
       r(2,1,i)=B(x(i),j);
   end
-  
-  end
 
-end
-
- % NO CANVIA
+  % NO CANVIA
   r(1,3,i)=0;
   r(3,1,i)=0;
   r(2,3,i)=0;
   r(3,2,i)=0;
+
+  
+  end
+
+end
 
 end
 

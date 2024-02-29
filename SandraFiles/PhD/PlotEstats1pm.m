@@ -14,7 +14,7 @@ load("dades.mat","m_b","m_c")
 setm_q(m_c)
 setspin(1)
 
-[aux,W,x]=QuarkoniumS0J0(m_q,spin);
+[E,W,x]=Spin1Jcal0_2(m_q,spin);
 
 %I am identifing 1+- estates with the 1,2,3 estates found:
 

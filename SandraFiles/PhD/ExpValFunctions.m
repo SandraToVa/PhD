@@ -59,8 +59,9 @@ else
      %dimension. Due to ConstrucMesh?????
      V=ExpectedValue(i,f,Op,QuarkoniumS0Ji,QuarkoniumS0Jf,m_q,sin,sfin);
      %Only one value is diferent from zero
-     [row,col]=find(V);
-     EV=V(row,col);
+     EV=V;
+     %[row,col]=find(V);
+     %EV=V(row,col);
     end
 end
 
@@ -75,16 +76,15 @@ function EV=HQComputeExpValM(i,f,M,trans,Ji,Jf,double)
 %(s/d)1 or (p/f)2 double is true and the operator has 2 components and the
 %w.f. is not only one like but two
 
-%initail
-setspin(1);
-sin=spin;
-
-
 %Define the funtions to use
 QuarkoniumS0Ji=str2func(['QuarkoniumS0J' num2str(Ji)]);
 QuarkoniumS0Jf=str2func(['QuarkoniumS0J' num2str(Jf)]);
 
-[Einicial,Yi,xi]=QuarkoniumS0Ji(m_q,sin);
+%initail
+setspin(1);
+sin=spin;
+
+[Einicial,~,xi]=QuarkoniumS0Ji(m_q,sin);
 
 Ei=Einicial(i);
 
@@ -92,7 +92,7 @@ Ei=Einicial(i);
 setspin(0)
 sfin=spin;
 
-[Efinal,Yf,xf]=QuarkoniumS0Jf(m_q,sfin);
+[Efinal,~,xf]=QuarkoniumS0Jf(m_q,sfin);
 
 Ef=Efinal(f);
 
@@ -131,7 +131,8 @@ else
 
 
      else
-         %Non double hybrids have 3 rows but only the third has information
+         %Non double hybrids have 3 rows but only the third/first has
+         %information (or one or the other)
          Op_s=trans(x,Ei,Ef,M);   %single
          [numR,numC] = size(Op_s);
          Op_s=diag(diag(Op_s));
@@ -144,8 +145,10 @@ else
      %dimension. Due to ConstrucMesh?????
      V=ExpectedValue(i,f,Op,QuarkoniumS0Ji,QuarkoniumS0Jf,m_q,sin,sfin);
 
-     %SHA DE CANVIAR PER A FER LA SUMA SI DOUBLE I NO SI SINGLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     %SHA DE CANVIAR PER A FER LA SUMA SI DOUBLE I NO SI SINGLE!! o meibi no
+     %fa falta
      EV=sum(V);
+
     end
 end
 

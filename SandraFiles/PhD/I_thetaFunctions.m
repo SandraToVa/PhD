@@ -7,60 +7,61 @@
 %Create a function to call all the functions in here:
 function res = I_thetaFunctions(x)
     disp(['Input value: ', x]);
-    % QQ
+    %%%%%%%%%% QQ %%%%%%%%%%%%
     if strcmp(x, 'QQS0toS0')
         res = @StoStrans;
-    elseif strcmp(x, 'QQP0toS0')
-        res = @P0toStrans;
+    %elseif strcmp(x, 'QQP0toS0') %No possible =0
+    %    res = @P0toStrans;
     elseif strcmp(x, 'QQP0toP0')
         res = @P0toP0trans;
     elseif strcmp(x, 'QQP1toP1')
         res = @P1toP1trans;
     elseif strcmp(x, 'QQD0toS0')
         res = @DtoStrans;
-    elseif strcmp(x, 'QQD0toP0')
-        res = @D0toP0trans;
-    elseif strcmp(x, 'QQD1toP1')
-        res = @D1toP1trans;
+    %elseif strcmp(x, 'QQD0toP0') %No possible =0
+    %    res = @D0toP0trans;
+    %elseif strcmp(x, 'QQD1toP1') %No possible =0
+    %    res = @D1toP1trans;
     elseif strcmp(x, 'QQD0toD0')
         res = @D0toD0trans;
     elseif strcmp(x, 'QQD1toD1')
         res = @D1toD1trans;
     elseif strcmp(x, 'QQD2toD2')
         res = @D2toD2trans;
-    % HQ
+   
+    %%%%%%%%%%%% HQ %%%%%%%%%%%%%%
     elseif strcmp(x, 'HQp0toD2')
         res = @Hp0toQd2trans;
-    elseif strcmp(x, 'HQp1toP1')
-        res = @Hp1toQp1trans;
+    %elseif strcmp(x, 'HQp1toP1') %No possible =0
+    %    res = @Hp1toQp1trans;
     elseif strcmp(x, 'HQp1toD1')
         res = @Hp1toQd1trans;
     elseif strcmp(x, 'HQp1toD2')
         res = @Hp1toQd2trans;
     elseif strcmp(x, 'HQsdtoP1')
         res = @HsdtoQp1trans;
-    elseif strcmp(x, 'HQsdtoD1')
-        res = @HsdtoQd1trans;
-    elseif strcmp(x, 'HQsdtoD2')
-        res = @HsdtoQd2trans;
-    elseif strcmp(x, 'HQd2toS0')
-        res = @Hd2toQs0trans;
+    %elseif strcmp(x, 'HQsdtoD1') %No possible =0
+    %    res = @HsdtoQd1trans;
+    %elseif strcmp(x, 'HQsdtoD2') %No possible =0
+    %    res = @HsdtoQd2trans;
+    %elseif strcmp(x, 'HQd2toS0') %No possible =0
+    %    res = @Hd2toQs0trans;
     elseif strcmp(x, 'HQd2toP0')
         res = @Hd2toQp0trans;
     elseif strcmp(x, 'HQd2toP1')
         res = @Hd2toQp1trans;
-    elseif strcmp(x, 'HQd2toD0')
-        res = @Hd2toQd0trans;
-    elseif strcmp(x, 'HQd2toD1')
-        res = @Hd2toQd1trans;
-    elseif strcmp(x, 'HQd2toD2')
-        res = @Hd2toQd2trans;
+    %elseif strcmp(x, 'HQd2toD0') %No possible =0
+    %    res = @Hd2toQd0trans;
+    %elseif strcmp(x, 'HQd2toD1') %No possible =0
+    %    res = @Hd2toQd1trans;
+    %elseif strcmp(x, 'HQd2toD2') %No possible =0
+    %    res = @Hd2toQd2trans;
     elseif strcmp(x, 'HQpftoS0')
         res = @HpftoQs0trans;
-    elseif strcmp(x, 'HQpftoP0')
-        res = @HpftoQp0trans;
-    elseif strcmp(x, 'HQpftoP1')
-        res = @HpftoQp1trans;
+    %elseif strcmp(x, 'HQpftoP0') %No possible =0
+    %    res = @HpftoQp0trans;
+    %elseif strcmp(x, 'HQpftoP1') %No possible =0
+    %    res = @HpftoQp1trans;
     elseif strcmp(x, 'HQpftoD0')
         res = @HpftoQd0trans;
     elseif strcmp(x, 'HQpftoD1')
@@ -92,7 +93,7 @@ function Fss=StoStrans(x,Ei,Ef,M)
 E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 r=diag(x);
-Fss=(1/(4*pi*Sq))*sinint((Sq/2).*r);
+Fss=(1/(2*pi*Sq))*sinint((Sq/2).*r);
 end
 
 %For p->s transitions (l=1,m=0 -> l=0)
@@ -104,7 +105,7 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Fps=(sqrt(3)/(4*pi))*(1-cos((Sq/2).*r))/((Q/2).*r);
+Fps=0.*r;
 end
 
 %For p->p transitions (l=1,m=0 -> l=1,m=0)
@@ -115,7 +116,7 @@ function Fpp00=P0toP0trans(x,Ei,Ef,M)
 E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 r=diag(x);
-Fpp00=(3/pi)*(sin((Sq/2).*r)-((Sq/2).*r).*cos((Sq/2).*r))/(Sq^3.*r^2);
+Fpp00=(3/pi)*(2*sin((Sq/2).*r)-(Sq.*r).*cos((Sq/2).*r))/(Sq^3.*r^2);
 end
 
 %For p->p transitions (l=1,m=+-1 -> l=1,m=+-1)
@@ -127,7 +128,7 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Fpp11=(3/(8*pi*Sq))*(-(sin((Sq/2).*r)-((Sq/2).*r).*cos((Sq/2).*r))/((Q/4).*r^2)+sinint((Sq/2).*r));
+Fpp11=(3/(4*pi*Sq))*(-(sin((Sq/2).*r)-((Sq/2).*r).*cos((Sq/2).*r))/((Q/4).*r^2)+sinint((Sq/2).*r));
 end
 
 %For d->s transitions (l=2,m=0 -> l=0)
@@ -138,7 +139,7 @@ function Fds=DtoStrans(x,Ei,Ef,M)
 E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 r=diag(x);
-Fds=-(sqrt(5)/(8*pi))*(sinint((Sq/2).*r)/Sq+6*(Sq*cos((Sq/2).*r).*r-2*sin((Sq/2).*r))/(Sq^3.*r^2));
+Fds=-(sqrt(5)/(8*pi))*(2*sinint((Sq/2).*r)/Sq+3*(4*Sq*cos((Sq/2).*r).*r - 8*sin((Sq/2).*r))/(Sq^3.*r^2));
 end
 
 %For d->p transitions (l=2,m=0 -> l=1,m=0)
@@ -150,7 +151,7 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Fdp00=(sqrt(15)/(8*pi))*(-48-2*Q.*r^2+(48-4*Q.*r^2).*cos((Sq/2).*r)+24*Sq.*r.*sin((Sq/2).*r))/(Q^2.*r^3);
+Fdp00=0.*r;
 end
 
 %For d->p transitions (l=2,m=+-1 -> l=1,m=+-1)
@@ -162,7 +163,7 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Fdp11=(3*sqrt(5)/(4*pi))*(8+Q.*r^2-8*cos((Sq/2).*r)-4*Sq.*r.*sin((Sq/2).*r))/(Q^2.*r^3);
+Fdp11=0.*r;
 end
 
 %For d->d transitions (l=2,m=0 -> l=2,m=0)
@@ -174,7 +175,7 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Fdd00=(5/(16*pi*Sq))*(sinint((Sq/2).*r)+6*(-Sq.*r*(Q.*r^2-72).*cos((Sq/2).*r)+2*(7*Q.*r^2-72).*sin((Sq/2).*r))/(Q^2.*r^4));
+Fdd00=(5/(8*pi*Sq))*(sinint((Sq/2).*r)+6*(-Sq.*r*(Q.*r^2-72).*cos((Sq/2).*r)+2*(7*Q.*r^2-72).*sin((Sq/2).*r))/(Q^2.*r^4));
 end
 
 %For d->d transitions (l=2,m=+-1 -> l=2,m=+-1)
@@ -186,7 +187,7 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Fdd11=(-15/pi)*((6*Sq.*r.*cos((Sq/2).*r)+(Q.*r^2 - 12).* sin((Sq/2).*r))/(Sq^5.*r^4));
+Fdd11=(-30/pi)*((6*Sq.*r.*cos((Sq/2).*r)+(Q.*r^2 - 12).* sin((Sq/2).*r))/(Sq^5.*r^4));
 end
 
 %For d->d transitions (l=2,m=+-2 -> l=2,m=+-2)
@@ -198,7 +199,7 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Fdd22=(15/(16*pi*Sq))*(sinint((Sq/2).*r)+2*(Sq.*r*(Q.*r^2+24).*cos((Sq/2).*r)+2*(Q.*r^2-24).*sin((Sq/2).*r))/(Q^2.*r^4));
+Fdd22=(15/(16*pi*Sq))*(sinint((Sq/2).*r)+(2*Sq.*r*(Q.*r^2+24).*cos((Sq/2).*r)+4*(Q.*r^2-24).*sin((Sq/2).*r))/(Q^2.*r^4));
 end
 
 %Now we start with the functions Hybrid -> Quarkonium +2Pions transitions
@@ -220,13 +221,13 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-A=(sqrt(15) / (32 * pi * sqrt(2)));
+A=sqrt(30)/ (32 * pi^2);
 B=diag(diag((1 ./ (Q^2 * r^3))));
-C1=16 * pi * Sq * r .* cos((Sq / 2) * r);
-C2=4 * pi * (-8 + pi^2 - Q * r^2) .* sin((Sq / 2) * r);
+C1=-16 * pi * Sq * r .* cos((Sq / 2) * r);
+C2=4 * pi * (8 - pi^2 + Q * r^2) .* sin((Sq / 2) * r);
 C3=(pi^2 - Q * r^2)^2 ;
 C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
-C=C1+C2+C3*C4;
+C=C1+C2-C3*C4;
 Hp0d2=A*B*C;
 %Hp0d2=(sqrt(15) / (32 * pi * sqrt(2))) * (1 ./ (Q^2 * r.^3)) * (16 * pi * Sq * r .* cos((Sq / 2) * r) + 4 * pi * (-8 + pi^2 - Q * r.^2) .* sin((Sq / 2) * r) + (pi^2 - Q * r.^2).^2 .* (sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2)));
 end
@@ -243,7 +244,7 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Hp1p1=(-3/(16*pi*sqrt(2)))*(1/(Sq^3*r^2))*(-8+8*cos((Sq/2)*r)+4*Sq*r*sin((Sq/2)*r)+(pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)+sinint((pi+Sq*r)/2)-2*sinint(pi/2)));
+Hp1p1=0 * r;
 end
 
 %Transition between Hp1->Q(l=2,m=1): HQp1toD1
@@ -257,7 +258,15 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Hp1d1=(-3*sqrt(10)/(32*pi))*(1/(Q^2*r^3))*(16*pi*Sq*r*cos((Sq/2)*r)+4*(-8+pi^2)*sin((Sq/2)*r)+pi*(pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+A=3*sqrt(10)/ (16 * pi);
+B=diag(diag((1 ./ (Q^2 * r^3))));
+C1=16 * Sq * r .* cos((Sq / 2) * r);
+C2=4 * (-8 + pi^2) .* sin((Sq / 2) * r);
+C3=pi*(pi - Sq * r)*(pi + Sq*r) ;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2+C3*C4;
+Hp1d1=A*B*C;
+%Hp1d1=(-3*sqrt(10)/(32*pi))*(1/(Q^2*r^3))*(16*pi*Sq*r*cos((Sq/2)*r)+4*(-8+pi^2)*sin((Sq/2)*r)+pi*(pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
 end
 
 %Transition between Hp1->Q(l=2,m=2): HQp1toD2
@@ -271,7 +280,15 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Hp1d2=(3*sqrt(5)/(64*pi^2))*(1/(Q^2*r^3))*(16*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-8+pi^2-Q*r^2)*sin((Sq/2)*r)+(pi^2-Q*r^2)^2*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+A=3*sqrt(5)/ (32 * pi^2);
+B=diag(diag((1 ./ (Q^2 * r^3))));
+C1=-16 * pi * Sq * r .* cos((Sq / 2) * r);
+C2=4 * pi * (8 - pi^2 + Q * r^2) .* sin((Sq / 2) * r);
+C3=(pi^2 - Q * r^2)^2 ;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2-C3*C4;
+Hp1d2=A*B*C;
+%Hp1d2=(3*sqrt(5)/(64*pi^2))*(1/(Q^2*r^3))*(16*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-8+pi^2-Q*r^2)*sin((Sq/2)*r)+(pi^2-Q*r^2)^2*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
 end
 
 %%%%%%%%%% (s/d)1
@@ -287,9 +304,26 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=0 (s part of the hybrid)
-Hsdp1(:,:,1)=(-1*sqrt(3)/(16*pi))*(1/(Q*r))*(4*sin((Sq/2)*r)+((pi^2-Q*r^2)/pi)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+A=sqrt(3)/ (8 * pi^2);
+B=diag(diag((1 ./ (Q * r))));
+C1=0;
+C2=4 * pi  .* sin((Sq / 2) * r);
+C3=(pi - Sq*r)*(pi + Sq*r) ;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C2+C3*C4;
+Hsdp1(:,:,1)=A*B*C;
+%Hsdp1(:,:,1)=(-1*sqrt(3)/(16*pi))*(1/(Q*r))*(4*sin((Sq/2)*r)+((pi^2-Q*r^2)/pi)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+
 %L=2 (d part of the hybrid)
-Hsdp1(:,:,2)=(-1*sqrt(6)/(64*pi^2))*(1/(Sq^3*r^3))*(48*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-24+3*pi^2-Q*r^2)*sin((Sq/2)*r)+(3*pi^4-4*pi^2*Q*r^2+Q^2*r^4)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+A=sqrt(6)/ (32 * pi^2);
+B=diag(diag((1 ./ (Q^2 * r^3))));
+C1=48 * pi * Sq * r .* cos((Sq / 2) * r);
+C2=4 * pi * (-24 +3*pi^2 - Q*r^2)  .* sin((Sq / 2) * r);
+C3=(3*pi^4 - 4*pi^2*Q*r^2 + Q^2*r^4) ;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2+C3*C4;
+Hsdp1(:,:,2)=A*B*C;
+%Hsdp1(:,:,2)=(-1*sqrt(6)/(64*pi^2))*(1/(Sq^3*r^3))*(48*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-24+3*pi^2-Q*r^2)*sin((Sq/2)*r)+(3*pi^4-4*pi^2*Q*r^2+Q^2*r^4)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
 end
 
 %Transition between Hsd1->Q(l=2,m=1): HQsdtoD1
@@ -305,9 +339,9 @@ Q=E^2-M^2;
 r=diag(x);
 Hsdd1=[];
 %L=0 (s part of the hybrid)
-Hsdd1(:,:,1)=(-1*sqrt(15)/(16*pi))*(1/(Sq^3*r^2))*(-8+8*cos((Sq/2)*r)+4*Sq*r*sin((Sq/2)*r)+(pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)+sinint((pi+Sq*r)/2)-2*sinint(pi/2)));
+Hsdd1(:,:,1)=0 *r;
 %L=2 (d part of the hybrid)
-Hsdd1(:,:,2)=(-1*sqrt(30)/(64*pi))*(1/(Sq^5*r^4))*(576-24*pi^2+32*Q*r^2+(-576+24*pi^2+40*Q*r^2)*cos((Sq/2)*r)+(-288*Sq*r+12*pi^2*Sq*r-4*Sq^3*r^3)*sin((Sq/2)*r)+(-6*pi^4+8*pi^2*Q*r^2-2*Q^2*r^4)*sinint(pi/2)+(3*pi^4-4*pi^2*Q*r^2+Q^2*r^4)*(sinint((pi-Sq*r)/2)+sinint((pi+Sq*r)/2)));
+Hsdd1(:,:,2)=0 *r;
 end
 
 %Transition between Hsd1->Q(l=2,m=2): HQsdtoD2
@@ -324,7 +358,7 @@ r=diag(x);
 %L=0 (s part of the hybrid)
 Hsdd2(:,:,1)=0*r;
 %L=2 (d part of the hybrid)
-Hsdd2(:,:,2)=(1*3*sqrt(15)/(64*pi))*(1/(Sq^5*r^4))*(192-8*pi^2+16*Q*r^2+8*(-24+pi^2+Q*r^2)*cos((Sq/2)*r)-4*Sq*r*(24-pi^2+Q*r^2)*sin((Sq/2)*r)+(-2*pi^4+4*pi^2*Q*r^2-2*Q^2*r^4)*sinint(pi/2)+(pi^2-Q*r^2)^2*(sinint((pi-Sq*r)/2)+sinint((pi+Sq*r)/2)));
+Hsdd2(:,:,2)=0*r;
 end
 
 
@@ -340,7 +374,7 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Hd2s0=(1*sqrt(5)/(16*pi))*(1/(Sq^3*r^2))*(-8+8*cos((Sq/2)*r)+4*Sq*r*sin((Sq/2)*r)+(pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)+sinint((pi+Sq*r)/2)-2*sinint(pi/2)));
+Hd2s0=0*r;
 end
 
 %Transition between Hd2->Q(l=1): HQd2toP0
@@ -354,7 +388,15 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Hd2p0=(1*sqrt(15)/(16*pi))*(1/(Q^2*r^3))*(16*pi*Sq*r*cos((Sq/2)*r)+4*(-8+pi^2)*sin((Sq/2)*r)+pi*(pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+A=sqrt(15)/ (8 * pi);
+B=diag(diag((1 ./ (Q^2 * r^3))));
+C1=16 * Sq * r .* cos((Sq / 2) * r);
+C2=4 * (-8 + pi^2)  .* sin((Sq / 2) * r);
+C3=pi*(pi - Sq * r)*(pi + Sq * r) ;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2+C3*C4;
+Hd2p0=A*B*C;
+%Hd2p0=(1*sqrt(15)/(16*pi))*(1/(Q^2*r^3))*(16*pi*Sq*r*cos((Sq/2)*r)+4*(-8+pi^2)*sin((Sq/2)*r)+pi*(pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
 end
 
 %Transition between Hd2->Q(l=1): HQd2toP1
@@ -368,7 +410,15 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Hd2p1=(-1*sqrt(6)/(64*pi^2))*(1/(Q^2*r^3))*(48*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-24+3*pi^2-Q*r^2)*sin((Sq/2)*r)+(3*pi^4-4*pi^2*Q*r^2+Q^2*r^4)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+A=sqrt(30)/ (32 * pi^2);
+B=diag(diag((1 ./ (Q^2 * r^3))));
+C1=48 * pi * Sq * r .* cos((Sq / 2) * r);
+C2=4 * pi * (-24 + 3*pi^2 - Q*r^2)  .* sin((Sq / 2) * r);
+C3=(3*pi^4 - 4*pi^2*Q*r^2 + Q^2*r^4) ;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2+C3*C4;
+Hd2p1=A*B*C;
+%Hd2p1=(-1*sqrt(6)/(64*pi^2))*(1/(Q^2*r^3))*(48*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-24+3*pi^2-Q*r^2)*sin((Sq/2)*r)+(3*pi^4-4*pi^2*Q*r^2+Q^2*r^4)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
 end
 
 %Transition between Hd2->Q(l=2): HQd2toD0
@@ -382,7 +432,7 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Hd2d0=(1*sqrt(5)/(32*pi))*(1/(Sq^5*r^4))*(576-24*pi^2+32*Q*r^2+(-576+24*pi^2+40*Q*r^2)*cos((Sq/2)*r)+(-288*Sq*r+12*pi^2*Sq*r-4*Sq^3*r^3)*sin((Sq/2)*r)+(-6*pi^4+8*pi^2*Q*r^2-2*Q^2*r^4)*sinint(pi/2)+(3*pi^4-4*pi^2*Q*r^2+Q^2*r^4)*(sinint((pi-Sq*r)/2)+sinint((pi+Sq*r)/2)));
+Hd2d0=0*r;
 end
 
 %Transition between Hd2->Q(l=2): HQd2toD1
@@ -396,7 +446,7 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Hd2d1=(-1*sqrt(30)/(64*pi^2))*(1/(Q^2*r^3))*(576-24*pi^2+32*Q*r^2+(-576+24*pi^2+40*Q*r^2)*cos((Sq/2)*r)+(-288*Sq*r+12*pi^2*Sq*r-4*Sq^3*r^3)*sin((Sq/2)*r)+(-6*pi^4+8*pi^2*Q*r^2-2*Q^2*r^4)*sinint(pi/2)+(3*pi^4-4*pi^2*Q*r^2+Q^2*r^4)*(sinint((pi-Sq*r)/2)+sinint((pi+Sq*r)/2)));
+Hd2d1=0*r;
 end
 
 %Transition between Hd2->Q(l=2): HQd2toD2
@@ -410,7 +460,7 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Hd2d2=(1*3*sqrt(15)/(64*pi))*(1/(Sq^5*r^4))*(192-8*pi^2+16*Q*r^2+8*(-24+pi^2+Q*r^2)*cos((Sq/2)*r)-4*Sq*r*(24-pi^2+Q*r^2)*sin((Sq/2)*r)+(-2*pi^4+4*pi^2*Q*r^2-2*Q^2*r^4)*sinint(pi/2)+(pi^2-Q*r^2)^2*(sinint((pi-Sq*r)/2)+sinint((pi+Sq*r)/2)));
+Hd2d2=0*r;
 end
 
 
@@ -427,8 +477,25 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=1 (p part of the hybrid)
-Hpfs0(:,:,1)=(1*sqrt(2)/(32*pi))*(1/(Q*r))*(4*sin((Sq/2)*r)+((pi^2-Q*r^2)/pi)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+A=sqrt(3)/ (8 * pi^2);
+B=diag(diag((1 ./ (Q * r))));
+C1=0;
+C2=4 * pi  .* sin((Sq / 2) * r);
+C3=(pi - Sq * r)*(pi + Sq * r);
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C2+C3*C4;
+Hpfs0(:,:,1)=A*B*C;
+%Hpfs0(:,:,1)=(1*sqrt(2)/(32*pi))*(1/(Q*r))*(4*sin((Sq/2)*r)+((pi^2-Q*r^2)/pi)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+
 %L=3 (f part of the hybrid)
+A=sqrt(2)/ (32 * pi^2);
+B=diag(diag((1 ./ (Q^2 * r^3))));
+C1=80 * pi * Sq * r .* cos((Sq / 2) * r);
+C2=4 * pi * (-40 +5*pi^2 - Q*r^2)  .* sin((Sq / 2) * r);
+C3=(5*pi^4 - 6*pi^2*Q*r^2 + Q^2*r^4) ;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2+C3*C4;
+Hpfs0(:,:,2)=A*B*C;
 Hpfs0(:,:,2)=(1*sqrt(2)/(64*pi^2))*(1/(Q^2*r^3))*(80*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-40+5*pi^2-Q*r^2)*sin((Sq/2)*r)+(5*pi^4-6*pi^2*Q*r^2+Q^2*r^4)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
 end
 
@@ -444,9 +511,9 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=1 (p part of the hybrid)
-Hpfp0(:,:,1)=(1*sqrt(6)/(32*pi))*(1/(Sq^3*r^2))*(-8+8*cos((Sq/2)*r)+4*Sq*r*sin((Sq/2)*r)+(pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)+sinint((pi+Sq*r)/2)-2*sinint(pi/2)));
+Hpfp0(:,:,1)=0*r;
 %L=3 (f part of the hybrid)
-Hpfp0(:,:,2)=(1*sqrt(6)/(64*pi))*(1/(Sq^5*r^4))*(960-40*pi^2+48*Q*r^2+8*(-120+5*pi^2+9*Q*r^2)*cos((Sq/2)*r)+(-480*Sq*r+20*pi^2*Sq*r-4*Sq^3*r^3)*sin((Sq/2)*r)+(-10*pi^4+12*pi^2*Q*r^2-2*Q^2*r^4)*sinint(pi/2)+(5*pi^4-6*pi^2*Q*r^2+Q^2*r^4)*(sinint((pi-Sq*r)/2)+sinint((pi+Sq*r)/2)));
+Hpfp0(:,:,2)=0*r;
 end
 
 %Transition between Hpf2->Q(l=1,m=1): HQpftoP1
@@ -461,9 +528,9 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=1 (p part of the hybrid)
-Hpfp1(:,:,1)=(-1*3*sqrt(2)/(32*pi))*(1/(Sq^3*r^2))*(-8+8*cos((Sq/2)*r)+4*Sq*r*sin((Sq/2)*r)+(pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)+sinint((pi+Sq*r)/2)-2*sinint(pi/2)));
+Hpfp1(:,:,1)=0*r;
 %L=3 (f part of the hybrid)
-Hpfp1(:,:,2)=(-1*sqrt(3)/(32*pi))*(1/(Sq^5*r^4))*(960-40*pi^2+64*Q*r^2+8*(-120+5*pi^2+7*Q*r^2)*cos((Sq/2)*r)+(-480*Sq*r+20*pi^2*Sq*r-12*Sq^3*r^3)*sin((Sq/2)*r)+(-10*pi^4+16*pi^2*Q*r^2-6*Q^2*r^4)*sinint(pi/2)+(5*pi^4-8*pi^2*Q*r^2+3*Q^2*r^4)*(sinint((pi-Sq*r)/2)+sinint((pi+Sq*r)/2)));
+Hpfp1(:,:,2)=0*r;
 end
 
 %Transition between Hpf2->Q(l=2,m=0): HQpftoD0
@@ -478,9 +545,26 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=1 (p part of the hybrid)
-Hpfd0(:,:,1)=(1*sqrt(10)/(64*pi^2))*(1/(Q^2*r^3))*(48*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-24+3*pi^2-Q*r^2)*sin((Sq/2)*r)+(3*pi^4-4*pi^2*Q*r^2+Q^2*r^4)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+A=sqrt(15)/ (16 * pi^2);
+B=diag(diag((1 ./ (Q^2 * r^3))));
+C1=48 * pi * Sq * r .* cos((Sq / 2) * r);
+C2=4 * pi * (-24 +3*pi^2 - Q*r^2)  .* sin((Sq / 2) * r);
+C3=(3*pi^4 - 4*pi^2*Q*r^2 + Q^2*r^4) ;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2+C3*C4;
+Hpfd0(:,:,1)=A*B*C;
+%Hpfd0(:,:,1)=(1*sqrt(10)/(64*pi^2))*(1/(Q^2*r^3))*(48*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-24+3*pi^2-Q*r^2)*sin((Sq/2)*r)+(3*pi^4-4*pi^2*Q*r^2+Q^2*r^4)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+
 %L=3 (f part of the hybrid)
-Hpfd0(:,:,2)=(1*sqrt(10)/(128*pi^2))*(1/(Q^3*r^5))*(16*pi*Sq*r*(-720+15*pi^2+7*Q*r^2)*cos((Sq/2)*r)+4*pi*(15*(384-8*pi^2+pi^4)-8*(67+pi^2)*Q*r^2+Q^2*r^4)*sin((Sq/2)*r)+(15*pi^6-23*pi^4*Q*r^2+9*pi^2*Q^2*r^4-Q^3*r^6)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+A=sqrt(10)/ (64 * pi^2);
+B=diag(diag((1 ./ (Q^3 * r^5))));
+C1=16 * pi * Sq * r * (-720 + 15*pi^2 + 7*Q*r^2) .* cos((Sq / 2) * r);
+C2=4 * pi * (15*(384 - 8*pi^2 + pi^4) - 8*(67 + pi^2)*Q*r^2 + Q^2*r^4)  .* sin((Sq / 2) * r);
+C3=(15*pi^6 - 23*pi^4*Q*r^2 + 9*pi^2*Q^2*r^4 - Q^3*r^6) ;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2+C3*C4;
+Hpfd0(:,:,2)=A*B*C;
+%Hpfd0(:,:,2)=(1*sqrt(10)/(128*pi^2))*(1/(Q^3*r^5))*(16*pi*Sq*r*(-720+15*pi^2+7*Q*r^2)*cos((Sq/2)*r)+4*pi*(15*(384-8*pi^2+pi^4)-8*(67+pi^2)*Q*r^2+Q^2*r^4)*sin((Sq/2)*r)+(15*pi^6-23*pi^4*Q*r^2+9*pi^2*Q^2*r^4-Q^3*r^6)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
 end
 
 %Transition between Hpf2->Q(l=2,m=1): HQpftoD1
@@ -495,9 +579,26 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=1 (p part of the hybrid)
-Hpfd1(:,:,1)=(-1*3*sqrt(10)/(64*pi^2))*(1/(Q^2*r^3))*(16*pi*Sq*r*cos((Sq/2)*r)+4*(-8+pi^2)*sin((Sq/2)*r)+pi*(pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+A=3*sqrt(10)/ (16 * pi);
+B=diag(diag((1 ./ (Q^2 * r^3))));
+C1=16 * Sq * r .* cos((Sq / 2) * r);
+C2=4 * (-8 + pi^2)  .* sin((Sq / 2) * r);
+C3=pi*(pi - Sq * r)*(pi + Sq * r);
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2+C3*C4;
+Hpfd1(:,:,1)=A*B*C;
+%Hpfd1(:,:,1)=(-1*3*sqrt(10)/(64*pi^2))*(1/(Q^2*r^3))*(16*pi*Sq*r*cos((Sq/2)*r)+4*(-8+pi^2)*sin((Sq/2)*r)+pi*(pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+
 %L=3 (f part of the hybrid)
-Hpfd1(:,:,2)=(-1*sqrt(15)/(32*pi))*(1/(Q^3*r^5))*(16*Sq*r*(-240+50*pi^2+2*Q*r^2)*cos((Sq/2)*r)+(20*(384-8*pi^2+pi^4)-4*(176+3*pi^2)*Q*r^2)*sin((Sq/2)*r)+pi*(5*pi^4-8*pi^2*Q*r^2+3*Q^2*r^4)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+A=sqrt(15)/ (16 * pi^2);
+B=diag(diag((1 ./ (Q^3 * r^5))));
+C1=16 * Sq * r * (-240 + 5*pi^2 + 2*Q*r^2) .* cos((Sq / 2) * r);
+C2=4 * (5*(384 - 8*pi^2 + pi^4) - (176 + 3*pi^2)*Q*r^2) .* sin((Sq / 2) * r);
+C3=pi*(5*pi^4 - 8*pi^2*Q*r^2 + 3*Q^2*r^4) ;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2+C3*C4;
+Hpfd1(:,:,2)=A*B*C;
+%Hpfd1(:,:,2)=(-1*sqrt(15)/(32*pi))*(1/(Q^3*r^5))*(16*Sq*r*(-240+50*pi^2+2*Q*r^2)*cos((Sq/2)*r)+(20*(384-8*pi^2+pi^4)-4*(176+3*pi^2)*Q*r^2)*sin((Sq/2)*r)+pi*(5*pi^4-8*pi^2*Q*r^2+3*Q^2*r^4)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
 end
 
 %Transition between Hpf2->Q(l=2,m=2): HQpftoD2
@@ -512,7 +613,24 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=1 (p part of the hybrid)
-Hpfd2(:,:,1)=(1*sqrt(15)/(64*pi^2))*(1/(Q^2*r^3))*(16*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-8+pi^2-Q*r^2)*sin((Sq/2)*r)+(pi^2-Q*r^2)^2*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+A=sqrt(15)/ (32 * pi^2);
+B=diag(diag((1 ./ (Q^2 * r^3))));
+C1=-16 * pi * Sq * r .* cos((Sq / 2) * r);
+C2=4 * pi * (8 -pi^2 + Q*r^2)  .* sin((Sq / 2) * r);
+C3=(pi^2 - Q*r^2)^2 ;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2-C3*C4;
+Hpfd2(:,:,1)=A*B*C;
+%Hpfd2(:,:,1)=(1*sqrt(15)/(64*pi^2))*(1/(Q^2*r^3))*(16*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-8+pi^2-Q*r^2)*sin((Sq/2)*r)+(pi^2-Q*r^2)^2*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+
 %L=3 (f part of the hybrid)
-Hpfd2(:,:,2)=(-1*sqrt(10)/(128*pi^2))*(1/(Q^3*r^5))*(16*pi*Sq*r*(240-5*pi^2+Q*r^2)*cos((Sq/2)*r)+-4*pi*(1920+5*pi^4-152*Q*r^2+Q^2*r^4-2*pi*(20+3*Q*r^2))*sin((Sq/2)*r)-(pi^2-Q*r^2)^2*(5*pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)+sinint((pi+Sq*r)/2)));
+A=3*sqrt(10)/ (64 * pi^2);
+B=diag(diag((1 ./ (Q^3 * r^5))));
+C1=16 * pi * Sq * r * (240 - 5*pi^2 + Q*r^2) .* cos((Sq / 2) * r);
+C2=-4 * pi * (5*(384 - 8*pi^2 + pi^4) - 2*(76 + 3*pi^2)*Q*r^2 + Q^2*r^4)  .* sin((Sq / 2) * r);
+C3=(pi^2 - Q*r^2)^2*(5*pi^2 - Q^2*r^2) ;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2+C3*C4;
+Hpfd2(:,:,2)=A*B*C;
+%Hpfd2(:,:,2)=(-1*sqrt(10)/(128*pi^2))*(1/(Q^3*r^5))*(16*pi*Sq*r*(240-5*pi^2+Q*r^2)*cos((Sq/2)*r)+-4*pi*(1920+5*pi^4-152*Q*r^2+Q^2*r^4-2*pi*(20+3*Q*r^2))*sin((Sq/2)*r)-(pi^2-Q*r^2)^2*(5*pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)+sinint((pi+Sq*r)/2)));
 end
