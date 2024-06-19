@@ -2,8 +2,8 @@
 setr0(3.964)
 setL1(0.07965)
 setL3(0.3105)
-%load("dades.mat","m_c","m_b")
-setm_q(1.4702)
+load("dades.mat","m_c","m_b")
+setm_q(m_c)
 setspin(1)
 % l= interpolació (0), llagures distncies (1), bad long distances (else)
 setl(0)
@@ -219,6 +219,8 @@ ci = confint(sf,0.68)
 %k1=p10 i k2=p01
 %Calcular primer en k1 i k2 i despues en los intervals resultats trobar los
 %millors valors per a p10 i p01
+%columna del mig interval A p10
+%tercer columna intervla B p01
 p10=0.12435;
 p01=0.00395;
 
@@ -262,15 +264,17 @@ function setm_q(val0)
 global v0
 v0=val0;
 end
+
+
 % VALOR DEL SPIN
-function x4=spin
-global v4
-x4=v4;
+function x7=spin
+global v7
+x7=v7;
 end 
 
-function setspin(val4)
-global v4
-v4 = val4;
+function setspin(val7)
+global v7
+v7 = val7;
 end
 
 
