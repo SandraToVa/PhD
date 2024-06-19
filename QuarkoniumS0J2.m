@@ -35,7 +35,7 @@ kmax=6;
 if s==0 %Quarkonium
     %number of actual states
     E=zeros(1,kmax+1);
-    tol0=4e-6;  %4e-6 gives x=81
+    tol0=5e-6;  %4e-6 gives x=81
     [EigvData,meshData]=computeEigenvalues(system,0,kmax*3,tol0);
 
     for k=0:kmax
@@ -43,7 +43,8 @@ if s==0 %Quarkonium
         E(kindex)=EigvData.eigenvalues(3*kindex)/m;
     end
 else %Hybrid
-    tol1=5e-8;   %ajust this tolerance in function of the mesh
+    tol1=5e-8;   %ajust this tolerance in function of the mesh 
+    %Defaut for spectrum hyperfine 5e-8
     [EigvData,meshData]=computeEigenvalues(system,0,kmax,tol1); 
     E=EigvData.eigenvalues/m;
 
