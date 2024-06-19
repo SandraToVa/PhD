@@ -1,5 +1,5 @@
 %Valor r0
-setr0(3.5)
+setr0(3.964)
 setL1(0.07965)
 setL3(0.3105)
 load("dades.mat","m_c","m_b")
@@ -48,35 +48,109 @@ e(14)=0.0346;
 
 I1=1;
 I2=1;
-results(I1,I2)=0;
-%Programa que busca la k òptima per a la chi^2
-for ka1=0.185:0.0001:0.186
+results(I1,I2)=0; 
+
+chimax=40;
+% Programa que busca la k òptima per a la chi^2
+for ka1=0.14:0.01:0.16
     setk1(ka1); 
     I2=1;
-    for ka2=-0.006:0.001:-0.003
+    for ka2=-0.0161:0.1:-0.0160
         setk2(ka2);
+        chi=0;
+
+        i=0;
         %Vector en los valors de la energia que necesito
-        
         [aux,~,~]=QuarkoniumS0J1(m_q,spin);
         a(1)=aux(1);
+        i=1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
+        end
+
         [aux,~,~]=Spin1Jcal0_1(m_q,spin);
         a(2)=aux(1);
+        i= i + 1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
+        end
+       
         [aux,~,~]=Spin1Jcal1_2(m_q,spin);
         a(3)=aux(1);
+        i= i + 1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
+        end
+        
         [aux,~,~]=Spin1Jcal2_1(m_q,spin);
         a(4)=aux(1);
+        i= i + 1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
+        end
+        
         [aux,~,~]=Spin1Jcal0_2(m_q,spin);
         a(5)=aux(1);
+        i= i + 1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
+        end
+        
         [aux,~,~]=Spin1Jcal2_2(m_q,spin);
         a(6)=aux(1);
+        i= i + 1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
+        end
+        
         [aux,~,~]=Spin1Jcal2_2(m_q,spin);
         a(7)=aux(2);
+        i= i + 1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
+        end
+        
         [aux,~,~]=QuarkoniumS0J0(m_q,spin);
         a(8)=aux(1);
+        i= i + 1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
+        end
+        
         [aux,~,~]=Spin1Jcal1_1(m_q,spin);
         a(9)=aux(1);
+        i= i + 1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
+        end
+        
         [aux,~,~]=Spin1Jcal1_1(m_q,spin);
         a(10)=aux(2);
+        i= i + 1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
+        end
+        
         [aux,~,~]=Spin1Jcal1_1(m_q,spin);
         if m_q==1.4702
              a(11)=aux(3); %If charmonium
@@ -84,17 +158,41 @@ for ka1=0.185:0.0001:0.186
         if m_q==4.8802
            a(11)=aux(5); %If bottomium
         end
+        i= i + 1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
+        end
+        
         [aux,~,~]=QuarkoniumS0J1(m_q,spin);
         a(12)=aux(2);
+        i= i + 1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
+        end
+        
         [aux,~,~]=QuarkoniumS0J2(m_q,spin);
         a(13)=aux(1);
+        i= i + 1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
+        end
+        
         [aux,~,~]=Spin1Jcal3_1(m_q,spin);
         a(14)=aux(1);
-    
-        chi=0;
-        for i=1:14
-            chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        i= i + 1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
         end
+        
+
         disp(I2);
         results(I1,I2)=chi;
         I2=I2+1;

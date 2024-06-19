@@ -1,8 +1,8 @@
 %Valor r0
-setr0(3.5)
+setr0(3.964)
 %Constants ajustades
-setk1(0.185)
-setk2(-0.0053)
+setk1(0.12435)
+setk2(0.00395)
 %Valors Lambda g
 setL1(0.07965)
 setL3(0.3105)
@@ -83,7 +83,8 @@ a(12)=aux(2);
 a(13)=aux(1);
 [aux,W,x]=Spin1Jcal3_1(m_q,spin);
 a(14)=aux(1);
-    
+
+if m_q==1.4702
 chi=0;
 for i=1:14
     chi=chi+((a(i)-t(i))^2)/((e(i))^2);
@@ -91,6 +92,8 @@ end
 
 
 chi  %Per al bottom el valor de chi no te sentit pq les dade steoriques son del c
+
+end
 
 a
 
