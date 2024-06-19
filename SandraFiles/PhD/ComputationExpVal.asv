@@ -2,18 +2,18 @@
 setr0(3.964)
 %massa
 load("dades.mat","m_c","m_b")
-setm_q(m_b)
+setm_q(m_c)
 
 
 %values (autentic)
 Min=0.27;
-Mfin=0.63; %Has to be changed by hand depnending on the trasnition
+Mfin=0.52; %Has to be changed by hand depnending on the trasnition
 
 %Now we compute I_theta for 4s->3s for diferent M
 %|Ef-Ei|>M
 
 %number of spaces:
-k=50;
+k=;
 %M row:
 nM=(Mfin-Min)/k;
 M=Min:nM:Mfin;
@@ -37,9 +37,9 @@ transitionN=I_thetaFunctions('HQsdtoPn'); %n of negative
 ExpValFunc=ExpValFunctions('HQ');
 
 
-Itheta0(n)=ExpValFunc(3,2,M(n),transition0,1,1,true);
-Itheta1(n)=ExpValFunc(3,2,M(n),transition1,1,1,true);
-IthetaN(n)=ExpValFunc(3,2,M(n),transitionN,1,1,true);
+Itheta0(n)=ExpValFunc(1,1,M(n),transition0,1,1,true);
+Itheta1(n)=ExpValFunc(1,1,M(n),transition1,1,1,true);
+IthetaN(n)=ExpValFunc(1,1,M(n),transitionN,1,1,true);
 
 %The N is not n in n(s/d)_J: remember the ordering of states for (s/d)1 and p1
 
@@ -51,14 +51,8 @@ fprintf('Number of iteration: %d / %d\n', n, k);
 
 end
 
-% Crear el scatter plot
-figure; % Crear una nueva figura
-scatter(M, Itheta, 60, 'filled'); % Scatter plot con puntos llenos y tamaño 100
-
-% Cambiar los nombres de los ejes
-xlabel('Dipion mass (GeV)');
-ylabel('I_theta^2 (1/GeV)');
-
+%graphic
+scatter(M,Itheta)
 Mtrans=M';
 Itrans=Itheta';
 
