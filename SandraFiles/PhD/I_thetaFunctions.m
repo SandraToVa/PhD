@@ -1,5 +1,9 @@
 
-%All the functions for computing I_\theta
+% UPDATE: En lloc de Itheta son Ii->f. And the sign is diferent! Instead of
+% - with e^{-iphi} and + with e^{+iphi} it is - for both
+% Només ho he canviat per a (s/d)1
+
+%All the functions for computing I_\theta 
 %These functions are the angular dependent part (theta and fi) integrated
 %with the corresponendt spherical harmonics of the states we want to
 %compute the decay with of.
@@ -88,6 +92,9 @@ function Fss=StoStrans(x,Ei,Ef,M)
 E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 r=diag(x);
+%Aproximation
+%Fss=r/(4*pi)-(r^3*Sq^2)/(288*pi);
+%Hole function
 Fss=(1/(2*pi*Sq))*sinint((Sq/2).*r);
 end
 
@@ -134,6 +141,9 @@ function Fds=DtoStrans(x,Ei,Ef,M)
 E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 r=diag(x);
+%Aproximation
+%Fds=-(r^3*Sq^2)/(144*(sqrt(5)*pi));
+%Hole function
 Fds=-(sqrt(5)/(8*pi))*(2*sinint((Sq/2).*r)/Sq+3*(4*Sq*cos((Sq/2).*r).*r - 8*sin((Sq/2).*r))/(Sq^3.*r^2));
 end
 
@@ -170,6 +180,9 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
+%Aprox
+%Fdd00=r/(4*pi)-(11*r^3*Q)/(2016*pi);
+%Hole
 Fdd00=(5/(8*pi*Sq))*(sinint((Sq/2).*r)+6*(-Sq.*r*(Q.*r^2-72).*cos((Sq/2).*r)+2*(7*Q.*r^2-72).*sin((Sq/2).*r))/(Q^2.*r^4));
 end
 
@@ -182,6 +195,9 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
+%Aprox
+%Fdd11=r/(4*pi)-(r^3*Q)/(224*pi);
+%Hole
 Fdd11=(-30/pi)*((6*Sq.*r.*cos((Sq/2).*r)+(Q.*r^2 - 12).* sin((Sq/2).*r))/(Sq^5.*r^4));
 end
 
@@ -194,6 +210,9 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
+%Aprox
+%Fdd22=r/(4*pi)-(r^3*Q)/(672*pi);
+%Hole
 Fdd22=(15/(16*pi*Sq))*(sinint((Sq/2).*r)+(2*Sq.*r*(Q.*r^2+24).*cos((Sq/2).*r)+4*(Q.*r^2-24).*sin((Sq/2).*r))/(Q^2.*r^4));
 end
 
@@ -223,8 +242,8 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %Green integral
-A= 1i / (8 * pi^2);
-B=diag(diag((1 ./ (Q * r))));
+A= 1i / (8 * pi);
+B=diag(diag((1 ./ (Q * r * pi))));
 C1=4 * pi * sin((Sq / 2) * r);
 C3=(pi - Sq * r) * (pi + Sq * r) ;
 C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
@@ -243,8 +262,8 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %Blue integral
-A= 1i * sqrt(5) / (16 * pi^2);
-B=diag(diag((1 ./ (Q^2 * r^3))));
+A= 1i * sqrt(5) / (16 * pi);
+B=diag(diag((1 ./ (Q^2 * r^3 * pi))));
 C1=48 * pi * Sq * r * cos((Sq / 2) * r);
 C2=4 * pi * (-24 + 3*pi^2 - Q*r^2) * sin((Sq / 2) * r);
 C3=3*pi^4 - 4*pi^2*Q*r^2 + Q^2*r^4;
@@ -267,8 +286,8 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-A= 1i * sqrt(6) / (16 * pi^2);
-B=diag(diag((1 ./ (Q * r))));
+A= 1i * sqrt(6) / (16 * pi);
+B=diag(diag((1 ./ (Q * r * pi))));
 C1=4 * pi * sin((Sq / 2) * r);
 C3=(pi - Sq * r) * (pi + Sq * r) ;
 C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
@@ -287,8 +306,8 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-A= 1i * sqrt(3) / (32 * pi^2);
-B=diag(diag((1 ./ (Q^2 * r^3))));
+A= 1i * sqrt(3) / (32 * pi);
+B=diag(diag((1 ./ (Q^2 * r^3 * pi))));
 C1=48 * pi * Sq * r * cos((Sq / 2) * r);
 C2=4 * pi * (-24 + 3*pi^2 - Q*r^2) * sin((Sq / 2) * r);
 C3=3*pi^4 - 4*pi^2*Q*r^2 + Q^2*r^4;
@@ -344,12 +363,12 @@ for i = 1:rows
     product = Sq * r_elem;
     
 % L=0 (part s del hybrid)
-    A= -1i * sqrt(3) / (8 * pi^2); %-1i *
+    A= -1i * sqrt(3) / (8 * pi); %-1i *
     % Apply the appropriate function based on the product value
-    if product < 1/10
+    if true %product < 1/10
         Hsdpn(i,i,1)= A * ( ( (4*r_elem^2*Sq) / (3*pi^2) ) + ( (8 - pi^2)*r_elem^4*Sq^3 / (30*pi^4) ) );
     else
-        B=1 / (Q * r_elem);
+        B=1 / (Q * r_elem * pi);
         C1=4 * pi * sin((Sq / 2) * r_elem);
         C3=(pi - Sq * r_elem) * (pi + Sq * r_elem) ;
         C4=sinint((pi - Sq * r_elem) / 2) - sinint((pi + Sq * r_elem) / 2);
@@ -358,12 +377,12 @@ for i = 1:rows
     end
     
 %L=2 (d part of the hybrid)
-     A= -1i * sqrt(6) / (32 * pi^2); %-1i *
+     A= -1i * sqrt(6) / (32 * pi); %-1i *
     % Apply the appropriate function based on the product value
-    if product < 1/10
+    if true %product < 1/10
         Hsdpn(i,i,2)= A * ( -(8*r_elem^2*Sq)/(15*pi^2) + (8-pi^2)*r_elem^4*Sq^3/(105*pi^4) );
     else
-        B=1 / (Q^2 * r_elem^3);
+        B=1 / (Q^2 * r_elem^3 * pi);
         C1=48 * pi * Sq * r_elem * cos((Sq / 2) * r_elem);
         C2=4 * pi * (-24 + 3*pi^2 - Q*r_elem^2) * sin((Sq / 2) * r_elem);
         C3=(3*pi^4 - 4*pi^2*Q*r_elem^2 + Q^2*r_elem^4);
@@ -403,7 +422,7 @@ for i = 1:rows
 %L=2 (d part of the hybrid)
      A= 1i * 3 * sqrt(6) / (16 * pi); %1i *
     % Apply the appropriate function based on the product value
-    if product < 1/10
+    if true %product < 1/10
         Hsdp0(i,i,2)= A * ( (4*r_elem^2*Sq)/(15*pi^2) + (8-pi^2)*r_elem^4*Sq^3/(70*pi^4) );
     else
         B=1 / (Q^2 * r_elem^3);
@@ -445,12 +464,12 @@ for i = 1:rows
 %this is zero   
     
 %L=2 (d part of the hybrid)
-     A= 1i * 3 * sqrt(6) / (32 * pi^2); %1i *
+     A= 1i * 3 * sqrt(6) / (32 * pi); %1i *
     % Apply the appropriate function based on the product value
-    if product < 1/10
+    if true %product < 1/10
         Hsdp1(i,i,2)= A *( (16*r_elem^2*Sq)/(15*pi^2) - 2*(-8+pi^2)*r_elem^4*Sq^3/(105*pi^4) );
     else
-        B=1 / (Q^2 * r_elem^3);
+        B=1 / (Q^2 * r_elem^3 * pi);
         C1=-16 * pi * Sq * r_elem * cos((Sq / 2) * r_elem);
         C2=4 * pi * (8 - pi^2 + Q*r_elem^2) * sin((Sq / 2) * r_elem);
         C3=-(pi^2 - Q*r_elem^2)^2;
@@ -477,8 +496,8 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=1 (p part of the hybrid)
-A= 1i / (8 * pi^2);
-B=diag(diag((1 ./ (Q * r))));
+A= 1i / (8 * pi);
+B=diag(diag((1 ./ (Q * r * pi))));
 C1=4 * pi * sin((Sq / 2) * r);
 C3=(pi - Sq * r) * (pi + Sq * r) ;
 C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
@@ -486,8 +505,8 @@ C=C1+C3*C4;
 Hpfs0(:,:,1)=A*B*C;
 
 %L=3 (f part of the hybrid)
-A=1i * sqrt(3)/ (16 * pi^2);
-B=diag(diag((1 ./ (Q^2 * r^3))));
+A=1i * sqrt(3)/ (16 * pi);
+B=diag(diag((1 ./ (Q^2 * r^3 * pi))));
 C1=80 * pi * Sq * r .* cos((Sq / 2) * r);
 C2=4 * pi * (-40 +5*pi^2 - Q*r^2)  .* sin((Sq / 2) * r);
 C3=(5*pi^4 - 6*pi^2*Q*r^2 + Q^2*r^4) ;
@@ -508,8 +527,8 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=1 (p part of the hybrid)
-A= -1i * 3 * sqrt(10) / (32 * pi^2);
-B=diag(diag((1 ./ (Q^2 * r^3))));
+A= -1i * 3 * sqrt(10) / (32 * pi);
+B=diag(diag((1 ./ (Q^2 * r^3 * pi))));
 C1=-16 * pi * Sq * r * cos((Sq / 2) * r);
 C2=4 * pi * (8 - pi^2 + Q*r^2) * sin((Sq / 2) * r);
 C3=(pi^2 - Q*r^2)^2;
@@ -517,8 +536,8 @@ C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
 C=C1+C2-C3*C4;
 Hpfdm(:,:,1)=A*B*C;
 %L=3 (f part of the hybrid)
-A= -1i * sqrt(15) / (64 * pi^2);
-B=diag(diag((1 ./ (Q^3 * r^5))));
+A= -1i * sqrt(15) / (64 * pi);
+B=diag(diag((1 ./ (Q^3 * r^5 * pi))));
 C1=16 * pi * Sq * r * (240 - 5*pi^2 + Q*r^2) *cos((Sq / 2) * r);
 C2=-4 * pi * (5*(384 - 8*pi^2 + pi^4) - 2*(76 + 3*pi^2)*Q*r^2 + Q^2*r^4) * sin((Sq / 2) * r);
 C3=((pi^2 - Q*r^2)^2) * (5*pi^2 - Q*r^2);
@@ -570,8 +589,8 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=1 (p part of the hybrid)
-A=1i * sqrt(10)/ (32 * pi^2);
-B=diag(diag((1 ./ (Q^2 * r^3))));
+A=1i * sqrt(10)/ (32 * pi);
+B=diag(diag((1 ./ (Q^2 * r^3 * pi))));
 C1=48 * pi * Sq * r * cos((Sq / 2) * r);
 C2=4 * pi * (-24 + 3*pi^2 - Q*r^2) * sin((Sq / 2) * r);
 C3=3*pi^4 - 4*pi^2*Q*r^2 + Q^2*r^4;
@@ -580,8 +599,8 @@ C=C1+C2+C3*C4;
 Hpfd0(:,:,1)=A*B*C;
 
 %L=3 (f part of the hybrid)
-A=1i * sqrt(15)/ (32 * pi^2);
-B=diag(diag((1 ./ (Q^3 * r^5))));
+A=1i * sqrt(15)/ (32 * pi);
+B=diag(diag((1 ./ (Q^3 * r^5 * pi))));
 C1=16 * pi * Sq * r * (-720 + 15*pi^2 + 7*Q*r^2) .* cos((Sq / 2) * r);
 C2=4 * pi * (15*(384 - 8*pi^2 + pi^4) - 8*(67 + pi^2)*Q*r^2 + Q^2*r^4)  .* sin((Sq / 2) * r);
 C3=(15*pi^6 - 23*pi^4*Q*r^2 + 9*pi^2*Q^2*r^4 - Q^3*r^6) ;
@@ -630,8 +649,8 @@ r=diag(x);
 Hpfd2(:,:,1)=0*r;
 
 %L=3 (f part of the hybrid)
-A=1i * 5* sqrt(15)/ (64 * pi^2);
-B=diag(diag((1 ./ (Q^3 * r^5))));
+A=1i * 5* sqrt(15)/ (64 * pi);
+B=diag(diag((1 ./ (Q^3 * r^5 * pi))));
 C1=16 * pi * Sq * r * (-48 + pi^2 - Q*r^2) .* cos((Sq / 2) * r);
 C2=4 * pi * (384 - 8*pi^2 + pi^4 - 2*(12 + pi^2)*Q*r^2 + Q^2*r^4)  .* sin((Sq / 2) * r);
 C3=(pi^2 - Q*r^2)^3;

@@ -275,7 +275,7 @@ function f1=Vg(x)
   % EFECTES HIPERFINS:
   %Corregits!!
   function HFP=Vpp(x) 
-   % Potencial V_pp
+   % Potencial V_pp ---- Este és el Vsa no el Vpp
   [m]=parameters;
   
   if m==1.4702
@@ -290,7 +290,7 @@ function f1=Vg(x)
   
   end
   function HFS=Vsp(x) 
-   % Potencial Vsp
+   % Potencial Vsp ---- Este és el Vsb no el Vsp
   [m]=parameters;
  
   if m==1.4702

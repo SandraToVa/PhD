@@ -1,3 +1,8 @@
+
+% UPDATE: En lloc de Itheta son Ii->f. And the sign is diferent! Instead of
+% - with e^{-iphi} and + with e^{+iphi} it is - for both
+% Només ho he canviat per a (s/d)1. Quarkonium està bé.
+
 %As I don't know the best way of making this type of code. This is simply a
 %document that acts as a gide of what I have to use inside the loop of
 %ComputationExpVal.m
@@ -208,10 +213,9 @@ end
 function SDtoP=SDtoPtrans
 %3 M->m': partial- and partial+ are the same so nothing is 0
 
-%M=0->m'=0 when adding partial- and partial+ its the double (all before
-%squaring)
-%For partial-: M=-1->m'=-1 is the same that for partial+: is M=1->m'=1 
-%For partial-: M=1->m'=1 is the same that for partial+: is M=-1->m'=-1 
+%M=0->m'=0 when adding partial- and partial+ = 0
+%For partial-: M=-1->m'=-1 is the same x(-1) that for partial+: is M=1->m'=1
+%For partial-: M=1->m'=1 is the same x(-1) that for partial+: is M=-1->m'=-1 
 
 %Therefore the transitions 1->1 and -1->-1 give the same result
 
@@ -227,7 +231,7 @@ IthetaN(n)=ExpValFunc(N,N',M(n),transitionN,1,1,true);
 
 %The N is not n in n(s/d)_J: remember the ordering of states for (s/d)1 and p1
 
-Itheta(n)=(2*(Itheta1(n)+IthetaN(n))*conj(Itheta1(n)+IthetaN(n)) + (2*Itheta0(n))*conj(2*Itheta0(n)))/3;
+Itheta(n)=( 2*(Itheta1(n)-IthetaN(n))*conj(Itheta1(n)-IthetaN(n)) )/3;
 
 end
 

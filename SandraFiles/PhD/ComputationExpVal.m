@@ -4,10 +4,9 @@ setr0(3.964)
 load("dades.mat","m_c","m_b")
 setm_q(m_b)
 
-
 %values (autentic)
 Min=0.27;
-Mfin=0.63; %Has to be changed by hand depnending on the trasnition
+Mfin=0.62; %Has to be changed by hand depnending on the trasnition
 
 %Now we compute I_theta for 4s->3s for diferent M
 %|Ef-Ei|>M
@@ -29,13 +28,11 @@ n=1;
 while n<=k+1
 %Inser here the transition following the guide of TransitionsAdded.m
 %
-
 transition0=I_thetaFunctions('HQsdtoP0');
 transition1=I_thetaFunctions('HQsdtoP1');
 transitionN=I_thetaFunctions('HQsdtoPn'); %n of negative
 
 ExpValFunc=ExpValFunctions('HQ');
-
 
 Itheta0(n)=ExpValFunc(3,2,M(n),transition0,1,1,true);
 Itheta1(n)=ExpValFunc(3,2,M(n),transition1,1,1,true);
@@ -43,7 +40,8 @@ IthetaN(n)=ExpValFunc(3,2,M(n),transitionN,1,1,true);
 
 %The N is not n in n(s/d)_J: remember the ordering of states for (s/d)1 and p1
 
-Itheta(n)=(2*(Itheta1(n)+IthetaN(n))*conj(Itheta1(n)+IthetaN(n)) + (2*Itheta0(n))*conj(2*Itheta0(n)))/3;
+Itheta(n)=( 2*(Itheta1(n)-IthetaN(n))*conj(Itheta1(n)-IthetaN(n)) )/3;
+
 
 %%%%%
 fprintf('Number of iteration: %d / %d\n', n, k);
@@ -57,7 +55,7 @@ scatter(M, Itheta, 60, 'filled'); % Scatter plot con puntos llenos y tamaño 100
 
 % Cambiar los nombres de los ejes
 xlabel('Dipion mass (GeV)');
-ylabel('I_theta^2 (1/GeV)');
+ylabel('I_{\theta}^2 (1/GeV)');
 
 Mtrans=M';
 Itrans=Itheta';
