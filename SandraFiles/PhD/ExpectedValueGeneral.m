@@ -1,3 +1,5 @@
+%Not the one i use!!!
+
 function V=ExpectedValueGeneral(i,f,Op,initial,final,m,sin,sfin)
 %Function to compute espected values using wavefunctions and any observable
 %Output:        - Returns a vector of positions = columns of wavefunctions initial

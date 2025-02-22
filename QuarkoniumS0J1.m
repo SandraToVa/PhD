@@ -25,7 +25,8 @@ system.V=@potentialMatrix;
 %disp(' ');
 %disp('Calculating eigenvalues with indices between 0 and 10:');
 t=cputime;
-kmax=7;
+%kmax=7; per a transicions
+kmax=4;
 
 
 % disp(['Number of intervals in the mesh: ' num2str(length(meshData.h))]); % number of intervals in the mesh
@@ -36,7 +37,7 @@ kmax=7;
 if s==0 %Quarkonium
     %number of actual states
     E=zeros(1,kmax+1);
-    tol0=5e-6;
+    tol0=4.5e-8;
     [EigvData,meshData]=computeEigenvalues(system,0,kmax*3,tol0);
 
     for k=0:kmax
@@ -44,7 +45,7 @@ if s==0 %Quarkonium
         E(kindex)=EigvData.eigenvalues(3*kindex)/m;
     end
 else %Hybrid
-    tol1=2e-5;   %ajust this tolerance in function of the mesh
+    tol1=1.9e-7;   %ajust this tolerance in function of the mesh
     [EigvData,meshData]=computeEigenvalues(system,0,kmax,tol1); 
     E=EigvData.eigenvalues/m;
 

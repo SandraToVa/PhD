@@ -179,16 +179,16 @@ function r=potentialMatrix(x) % returns the potential matrix evaluated in x
   
   if s==1 % CAS HYBRIT QUARKONIUM P^(+,0,-)
     if j==1
-      r(1,1,i)=CC(x(i),j-1)-FF(x(i),j)+2*I1(x(i),j);
-      r(2,2,i)=F(x(i),j)-GG(x(i),j)+2*E5(x(i),j);
-      r(3,3,i)=A(x(i),j+1)-HH(x(i),j)+2*A9(x(i),j);
-      r(4,4,i)=CC(x(i),j+1)+Vhf(x(i))+2*A1(x(i),j);
+      r(1,1,i)=CC(x(i),j-1)+ (-2)*(-FF(x(i),j)+2*I1(x(i),j));
+      r(2,2,i)=F(x(i),j)+ (-2)*(-GG(x(i),j)+2*E5(x(i),j));
+      r(3,3,i)=A(x(i),j+1)+ (-2)*(-HH(x(i),j)+2*A9(x(i),j));
+      r(4,4,i)=CC(x(i),j+1)+ (-2)*(+Vhf(x(i))+2*A1(x(i),j));
 
-      r(1,2,i)=FG(x(i),j)+F4(x(i),j)+G2(x(i),j);
+      r(1,2,i)=+(-2)*(FG(x(i),j)+F4(x(i),j)+G2(x(i),j));
       r(2,1,i)=r(1,2,i);
-      r(2,3,i)=GH(x(i),j)+B8(x(i),j)+D6(x(i),j);
+      r(2,3,i)=+(-2)*(GH(x(i),j)+B8(x(i),j)+D6(x(i),j));
       r(3,2,i)=r(2,1,i);
-      r(3,4,i)=B(x(i),j+1)+A3(x(i),j)+A7(x(i),j);
+      r(3,4,i)=B(x(i),j+1)+ (-2)*(A3(x(i),j)+A7(x(i),j));
       r(4,3,i)=r(3,4,i);
             
       r(1,3,i)=0;
@@ -196,7 +196,7 @@ function r=potentialMatrix(x) % returns the potential matrix evaluated in x
       r(1,4,i)=0;
       r(4,1,i)=r(1,4,i);
             
-      r(2,4,i)=D4(x(i),j);
+      r(2,4,i)=+(-2)*(D4(x(i),j));
       r(4,2,i)=r(2,4,i);
             
          
@@ -280,34 +280,37 @@ function f1=Vg(x)
   end
 
   % EFECTES HIPERFINS:
-  
-   function HFP=Vpp(x) 
-   % Potencial V_pp
+  %Corregits!!
+  function HFP=Vsa(~) 
+   % Potencial V_pp ---- Este és el Vsa no el Vpp
   [m]=parameters;
-  
+  %El signe - és el que porta la pròpia formula de Vsa
+  %El signe que surti del L3 serà el signe del +- del propi glambda'''
   if m==1.4702
   cf=1.12155;
   k=0.187;
-  HFP=(cf*L3*pi^2)/(m*k*r0^3);
+  HFP=-2*(cf*L3*pi^2)/(m*k*r0^3);
   else
   cf=0.87897;
   k=0.187;
-  HFP=(cf*L3*pi^2)/(m*k*r0^3);
+  HFP=-2*(cf*L3*pi^2)/(m*k*r0^3);
   end
   
   end
-  function HFS=Vsp(x) 
-   % Potencial Vsp
+  function HFS=Vsb(~) 
+   % Potencial Vsp ---- Este és el Vsb no el Vsp
   [m]=parameters;
- 
+  %EL signe - és el signe que porta L1 (glambda') que sabem que es negatiu
+  %El signe que tingue L1 serà el del +- del potencial Vsb
+  %El dos del error està inclos aquí
   if m==1.4702
   cf=1.12155;
   k=0.187;
-  HFS=(cf*L1*pi^2)/(m*sqrt(pi*k)*r0^2);
+  HFS=-2*(cf*L1*pi^2)/(m*sqrt(pi*k)*r0^2);
   else
   cf=0.87897;
   k=0.187;
-  HFS=(cf*L1*pi^2)/(m*sqrt(pi*k)*r0^2);
+  HFS=-2*(cf*L1*pi^2)/(m*sqrt(pi*k)*r0^2);
   end
   
   end
@@ -316,13 +319,15 @@ function f1=Vg(x)
  
   function HF1=Vhf(x) 
    % Control de l'efecte del 1r potencial
+   % El -2 que acompanya als potencials ja etsà inclos en la matriu de
+   % sobre. Aquí només la pròpia expressió del Vhf
    if l==0 %interpolació
-       HF1=(k1+((x./r0).^2*(-(Vpp(x)/3)-(2/3)*(x./r0)*Vsp(x))))./(1+(x./r0).^5);
+       HF1=(k1+((x./r0).^2*((Vsa/6)-(1/3)*(x./r0)*Vsb)))./(1+(x./r0).^5);
    elseif l==1 %llargues distàncies
        hevi=heaviside(sym(x) - r0);
-       HF1=(-(Vpp(x)/3)*(r0^3/x.^3)-(2/3)*Vsp(x)*(r0^2/x.^2))*hevi;
+       HF1=((Vsa/6)*(r0^3/x.^3)-(1/3)*Vsb*(r0^2/x.^2))*hevi;
    else %Bad long distances:
-       HF1=-(Vpp(x)/3)-(2/3)*Vsp(x);
+       HF1=(Vsa/6)-(1/3)*Vsb;
    end
   end  
   
@@ -358,12 +363,12 @@ end
  function HF2=Vhf2(x) 
    % Control de l'efecte del 1r potencial
    if l==0 %interpolació
-       HF2=((k2*(x.^2))+((x./r0).^5*(+(r0./x)*Vpp(x)-Vsp(x))))./(1+(x./r0).^7);
+       HF2=((k2*(x.^2)) - ( (x./r0).^5 * ( (1/2)*(r0./x)*Vsa + (1/2)*Vsb ) )) ./ (1+(x./r0).^7);
    elseif l==1 %llargues distàncies
        hevi=heaviside(sym(x) - r0);
-       HF2=(Vpp(x)*(r0^3/x.^3)-Vsp(x)*(r0^2/x.^2))*hevi;
+       HF2=-(1/2)*( Vsa*(r0^3/x.^3) + Vsb*(r0^2/x.^2) )*hevi;
    else %Bad long distances:
-       HF2=Vpp(x)-Vsp(x);
+       HF2=-(1/2)*( Vsa + Vsb );
    end
   end 
   
@@ -447,4 +452,4 @@ end
   end
    function II9=I9(x,j)
   II9=Vhf2(x)*(2-j)/(-3+6*j);
-  end
+   end

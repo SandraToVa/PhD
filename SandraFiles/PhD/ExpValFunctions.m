@@ -42,7 +42,7 @@ Ef=Efinal(f);
 E1=abs(Ef-Ei);
 if M>E1
     EV=0;
-    disp('M>E1 cannot be')
+    disp(['M>E1 cannot be', num2str(E1)])
 
 else
 %Operator that we want to find the expectated value
@@ -99,7 +99,7 @@ Ef=Efinal(f);
 E1=abs(Ef-Ei);
 if M>E1
     EV=0;
-    disp('M>E1 cannot be')
+    disp(['M>E1 cannot be', num2str(E1)])
 
 else
 %Operator that we want to find the expectated value

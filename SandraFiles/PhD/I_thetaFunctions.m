@@ -1,8 +1,13 @@
 
-%All the functions for computing I_\theta
+% UPDATE: En lloc de Itheta son Ii->f. And the sign is diferent! Instead of
+% - with e^{-iphi} and + with e^{+iphi} it is - for both
+% Només ho he canviat per a (s/d)1
+
+%All the functions for computing I_\theta 
 %These functions are the angular dependent part (theta and fi) integrated
 %with the corresponendt spherical harmonics of the states we want to
 %compute the decay with of.
+%Actualitzat en la integracio de 0 a pi 
 
 %Create a function to call all the functions in here:
 function res = I_thetaFunctions(x)
@@ -30,38 +35,32 @@ function res = I_thetaFunctions(x)
         res = @D2toD2trans;
    
     %%%%%%%%%%%% HQ %%%%%%%%%%%%%%
-    elseif strcmp(x, 'HQp0toD2')
-        res = @Hp0toQd2trans;
-    %elseif strcmp(x, 'HQp1toP1') %No possible =0
-    %    res = @Hp1toQp1trans;
+    % p0 trans
+    elseif strcmp(x, 'HQp0toS0')
+        res = @Hp0toQs0trans;
+    elseif strcmp(x, 'HQp0toD0')
+        res = @Hp0toQd0trans;
+    % p1 trans
+    elseif strcmp(x, 'HQp1toS0') 
+        res = @Hp1toQs0trans;
+    elseif strcmp(x, 'HQp1toD0')
+        res = @Hp1toQd0trans;
     elseif strcmp(x, 'HQp1toD1')
         res = @Hp1toQd1trans;
-    elseif strcmp(x, 'HQp1toD2')
-        res = @Hp1toQd2trans;
+    % (s/d)1 trans
+    elseif strcmp(x, 'HQsdtoPn') %m'=-1 = n
+        res = @HsdtoQpntrans;
+    elseif strcmp(x, 'HQsdtoP0')
+        res = @HsdtoQp0trans;
     elseif strcmp(x, 'HQsdtoP1')
         res = @HsdtoQp1trans;
-    %elseif strcmp(x, 'HQsdtoD1') %No possible =0
-    %    res = @HsdtoQd1trans;
-    %elseif strcmp(x, 'HQsdtoD2') %No possible =0
-    %    res = @HsdtoQd2trans;
-    %elseif strcmp(x, 'HQd2toS0') %No possible =0
-    %    res = @Hd2toQs0trans;
-    elseif strcmp(x, 'HQd2toP0')
-        res = @Hd2toQp0trans;
-    elseif strcmp(x, 'HQd2toP1')
-        res = @Hd2toQp1trans;
-    %elseif strcmp(x, 'HQd2toD0') %No possible =0
-    %    res = @Hd2toQd0trans;
-    %elseif strcmp(x, 'HQd2toD1') %No possible =0
-    %    res = @Hd2toQd1trans;
-    %elseif strcmp(x, 'HQd2toD2') %No possible =0
-    %    res = @Hd2toQd2trans;
+    % (p/f)2 trans
     elseif strcmp(x, 'HQpftoS0')
         res = @HpftoQs0trans;
-    %elseif strcmp(x, 'HQpftoP0') %No possible =0
-    %    res = @HpftoQp0trans;
-    %elseif strcmp(x, 'HQpftoP1') %No possible =0
-    %    res = @HpftoQp1trans;
+    elseif strcmp(x, 'HQpftoDm') %m'=-2 = m
+        res = @HpftoQdmtrans;
+    elseif strcmp(x, 'HQpftoDn') %m'=-1 = n
+        res = @HpftoQdntrans;
     elseif strcmp(x, 'HQpftoD0')
         res = @HpftoQd0trans;
     elseif strcmp(x, 'HQpftoD1')
@@ -93,6 +92,9 @@ function Fss=StoStrans(x,Ei,Ef,M)
 E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 r=diag(x);
+%Aproximation
+%Fss=r/(4*pi)-(r^3*Sq^2)/(288*pi);
+%Hole function
 Fss=(1/(2*pi*Sq))*sinint((Sq/2).*r);
 end
 
@@ -139,6 +141,9 @@ function Fds=DtoStrans(x,Ei,Ef,M)
 E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 r=diag(x);
+%Aproximation
+%Fds=-(r^3*Sq^2)/(144*(sqrt(5)*pi));
+%Hole function
 Fds=-(sqrt(5)/(8*pi))*(2*sinint((Sq/2).*r)/Sq+3*(4*Sq*cos((Sq/2).*r).*r - 8*sin((Sq/2).*r))/(Sq^3.*r^2));
 end
 
@@ -175,6 +180,9 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
+%Aprox
+%Fdd00=r/(4*pi)-(11*r^3*Q)/(2016*pi);
+%Hole
 Fdd00=(5/(8*pi*Sq))*(sinint((Sq/2).*r)+6*(-Sq.*r*(Q.*r^2-72).*cos((Sq/2).*r)+2*(7*Q.*r^2-72).*sin((Sq/2).*r))/(Q^2.*r^4));
 end
 
@@ -187,6 +195,9 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
+%Aprox
+%Fdd11=r/(4*pi)-(r^3*Q)/(224*pi);
+%Hole
 Fdd11=(-30/pi)*((6*Sq.*r.*cos((Sq/2).*r)+(Q.*r^2 - 12).* sin((Sq/2).*r))/(Sq^5.*r^4));
 end
 
@@ -199,6 +210,9 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
+%Aprox
+%Fdd22=r/(4*pi)-(r^3*Q)/(672*pi);
+%Hole
 Fdd22=(15/(16*pi*Sq))*(sinint((Sq/2).*r)+(2*Sq.*r*(Q.*r^2+24).*cos((Sq/2).*r)+4*(Q.*r^2-24).*sin((Sq/2).*r))/(Q^2.*r^4));
 end
 
@@ -209,11 +223,17 @@ end
 %But as the part we are interested in is the product with the complex
 %conjugate the imaginary part plays no rol.
 
-%%%%%%%%% p0
-%Transition between Hp0->Q(l=2,m=2): HQp0toD2
-%Only transition for p0 states to quarkonium for l=<2
+% IMPORTANT - WRONG!!
+%The only functions actually used are the (s/d)1 functions. For them the
+%behaviour was wrong unless using the tyalor development at Sq*r small.
+%This is missing in the other functions. If we want to use them we should
+%implement the taylor development
+
+%%%%%%%%% p0  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Transition between Hp0->Q(l=0,m=0): HQp0toS0
 %Sandwitch directe
-function Hp0d2=Hp0toQd2trans(x,Ei,Ef,M)
+function Hp0s0=Hp0toQs0trans(x,Ei,Ef,M)
 % x is the system = r in the string
 % E=Ef-Ei of the trensition
 % M = dipion invariant mass
@@ -221,22 +241,19 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-A=sqrt(30)/ (32 * pi^2);
-B=diag(diag((1 ./ (Q^2 * r^3))));
-C1=-16 * pi * Sq * r .* cos((Sq / 2) * r);
-C2=4 * pi * (8 - pi^2 + Q * r^2) .* sin((Sq / 2) * r);
-C3=(pi^2 - Q * r^2)^2 ;
+%Green integral
+A= 1i / (8 * pi);
+B=diag(diag((1 ./ (Q * r * pi))));
+C1=4 * pi * sin((Sq / 2) * r);
+C3=(pi - Sq * r) * (pi + Sq * r) ;
 C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
-C=C1+C2-C3*C4;
-Hp0d2=A*B*C;
-%Hp0d2=(sqrt(15) / (32 * pi * sqrt(2))) * (1 ./ (Q^2 * r.^3)) * (16 * pi * Sq * r .* cos((Sq / 2) * r) + 4 * pi * (-8 + pi^2 - Q * r.^2) .* sin((Sq / 2) * r) + (pi^2 - Q * r.^2).^2 .* (sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2)));
+C=C1+C3*C4;
+Hp0s0=A*B*C;
 end
 
-%%%%%%%%%%% p1
-%Transition between Hp1->Q(l=1,m=1): HQp1toP1
-%Only contribution for Q(l=1)
+%Transition between Hp0->Q(l=2,m=0): HQp0toD0
 %Sandwitch directe
-function Hp1p1=Hp1toQp1trans(x,Ei,Ef,M)
+function Hp0d0=Hp0toQd0trans(x,Ei,Ef,M)
 % x is the system = r in the string
 % E=Ef-Ei of the trensition
 % M = dipion invariant mass
@@ -244,11 +261,63 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-Hp1p1=0 * r;
+%Blue integral
+A= 1i * sqrt(5) / (16 * pi);
+B=diag(diag((1 ./ (Q^2 * r^3 * pi))));
+C1=48 * pi * Sq * r * cos((Sq / 2) * r);
+C2=4 * pi * (-24 + 3*pi^2 - Q*r^2) * sin((Sq / 2) * r);
+C3=3*pi^4 - 4*pi^2*Q*r^2 + Q^2*r^4;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2+C3*C4;
+Hp0d0=A*B*C;
 end
 
-%Transition between Hp1->Q(l=2,m=1): HQp1toD1
-%To Q(l=2) contribute 2 terms (m=1)
+
+%%%%%%%%%%% p1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Transition between Hp1->Q(l=0,m=0): HQp1toS0
+%Only contribution for Q(l=0)
+%Sandwitch directe
+function Hp1s0=Hp1toQs0trans(x,Ei,Ef,M)
+% x is the system = r in the string
+% E=Ef-Ei of the trensition
+% M = dipion invariant mass
+E=Ef-Ei;
+Sq=sqrt(E^2-M^2);
+Q=E^2-M^2;
+r=diag(x);
+A= 1i * sqrt(6) / (16 * pi);
+B=diag(diag((1 ./ (Q * r * pi))));
+C1=4 * pi * sin((Sq / 2) * r);
+C3=(pi - Sq * r) * (pi + Sq * r) ;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C3*C4;
+Hp1s0=A*B*C;
+end
+
+%Transition between Hp1->Q(l=2,m=0): HQp1toD0
+%Two contribution for Q(l=2)
+%Sandwitch directe
+function Hp1d0=Hp1toQd0trans(x,Ei,Ef,M)
+% x is the system = r in the string
+% E=Ef-Ei of the trensition
+% M = dipion invariant mass
+E=Ef-Ei;
+Sq=sqrt(E^2-M^2);
+Q=E^2-M^2;
+r=diag(x);
+A= 1i * sqrt(3) / (32 * pi);
+B=diag(diag((1 ./ (Q^2 * r^3 * pi))));
+C1=48 * pi * Sq * r * cos((Sq / 2) * r);
+C2=4 * pi * (-24 + 3*pi^2 - Q*r^2) * sin((Sq / 2) * r);
+C3=3*pi^4 - 4*pi^2*Q*r^2 + Q^2*r^4;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2+C3*C4;
+Hp1d0=A*B*C;
+end
+
+%Transition between Hp1->Q(l=2,m=-1): HQp1toD0
+%Two contribution for Q(l=2)
 %Sandwitch directe
 function Hp1d1=Hp1toQd1trans(x,Ei,Ef,M)
 % x is the system = r in the string
@@ -258,21 +327,23 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-A=3*sqrt(10)/ (16 * pi);
+A= -1i * 3 * sqrt(10) / (16 * pi);
 B=diag(diag((1 ./ (Q^2 * r^3))));
-C1=16 * Sq * r .* cos((Sq / 2) * r);
-C2=4 * (-8 + pi^2) .* sin((Sq / 2) * r);
-C3=pi*(pi - Sq * r)*(pi + Sq*r) ;
+C1=16 * Sq * r * cos((Sq / 2) * r);
+C2=4 * (-8 + pi^2) * sin((Sq / 2) * r);
+C3=pi * (pi - Sq*r) * (pi + Sq*r);
 C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
 C=C1+C2+C3*C4;
 Hp1d1=A*B*C;
-%Hp1d1=(-3*sqrt(10)/(32*pi))*(1/(Q^2*r^3))*(16*pi*Sq*r*cos((Sq/2)*r)+4*(-8+pi^2)*sin((Sq/2)*r)+pi*(pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
 end
 
-%Transition between Hp1->Q(l=2,m=2): HQp1toD2
-%To Q(l=2) contribute 2 terms (m=2)
-%Sandwitch directe
-function Hp1d2=Hp1toQd2trans(x,Ei,Ef,M)
+
+%%%%%%%%%% (s/d)1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Transition between Hsd1->Q(l=1,m=-1): HQsdtoP-
+%3 contribution for Q(l=1) this is one of them
+%Sandwitch: 1st row L=0 (s) and 2nd row L=2 (d) part of the hyrbid
+function Hsdpn=HsdtoQpntrans(x,Ei,Ef,M)
 % x is the system = r in the string
 % E=Ef-Ei of the trensition
 % M = dipion invariant mass
@@ -280,20 +351,95 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-A=3*sqrt(5)/ (32 * pi^2);
-B=diag(diag((1 ./ (Q^2 * r^3))));
-C1=-16 * pi * Sq * r .* cos((Sq / 2) * r);
-C2=4 * pi * (8 - pi^2 + Q * r^2) .* sin((Sq / 2) * r);
-C3=(pi^2 - Q * r^2)^2 ;
-C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
-C=C1+C2-C3*C4;
-Hp1d2=A*B*C;
-%Hp1d2=(3*sqrt(5)/(64*pi^2))*(1/(Q^2*r^3))*(16*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-8+pi^2-Q*r^2)*sin((Sq/2)*r)+(pi^2-Q*r^2)^2*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
-end
 
-%%%%%%%%%% (s/d)1
+% Loop through each element of the diagonal matrix r
+[rows, cols] = size(r);
+Hsdpn(:,:,:)=zeros(rows,cols,2);
+for i = 1:rows
+    % Get the diagonal element
+    r_elem = r(i, i);
+    
+    % Compute the product of Sq and the diagonal element
+    product = Sq * r_elem;
+    
+% L=0 (part s del hybrid)
+    A= -1i * sqrt(3) / (8 * pi); %-1i *
+    % Apply the appropriate function based on the product value
+    if true %product < 1/10
+        Hsdpn(i,i,1)= A * ( ( (4*r_elem^2*Sq) / (3*pi^2) ) + ( (8 - pi^2)*r_elem^4*Sq^3 / (30*pi^4) ) );
+    else
+        B=1 / (Q * r_elem * pi);
+        C1=4 * pi * sin((Sq / 2) * r_elem);
+        C3=(pi - Sq * r_elem) * (pi + Sq * r_elem) ;
+        C4=sinint((pi - Sq * r_elem) / 2) - sinint((pi + Sq * r_elem) / 2);
+        C=C1+C3*C4;
+        Hsdpn(i,i,1)=A*B*C;
+    end
+    
+%L=2 (d part of the hybrid)
+     A= -1i * sqrt(6) / (32 * pi); %-1i *
+    % Apply the appropriate function based on the product value
+    if true %product < 1/10
+        Hsdpn(i,i,2)= A * ( -(8*r_elem^2*Sq)/(15*pi^2) + (8-pi^2)*r_elem^4*Sq^3/(105*pi^4) );
+    else
+        B=1 / (Q^2 * r_elem^3 * pi);
+        C1=48 * pi * Sq * r_elem * cos((Sq / 2) * r_elem);
+        C2=4 * pi * (-24 + 3*pi^2 - Q*r_elem^2) * sin((Sq / 2) * r_elem);
+        C3=(3*pi^4 - 4*pi^2*Q*r_elem^2 + Q^2*r_elem^4);
+        C4=sinint((pi - Sq * r_elem) / 2) - sinint((pi + Sq * r_elem) / 2);
+        C=C1+C2+C3*C4;
+        Hsdpn(i,i,2)=A*B*C;
+    end
+end %for end
+
+end %function end
+
+%Transition between Hsd1->Q(l=1,m=0): HQsdtoP0
+%3 contribution for Q(l=1) this is the 2nd one
+%Sandwitch: 1st row L=0 (s) and 2nd row L=2 (d) part of the hyrbid
+function Hsdp0=HsdtoQp0trans(x,Ei,Ef,M)
+% x is the system = r in the string
+% E=Ef-Ei of the trensition
+% M = dipion p0invariant mass
+E=Ef-Ei;
+Sq=sqrt(E^2-M^2);
+Q=E^2-M^2;
+r=diag(x);
+
+% Loop through each element of the diagonal matrix r
+[rows, cols] = size(r);
+Hsdp0(:,:,:)=zeros(rows,cols,2);
+for i = 1:rows
+    % Get the diagonal element
+    r_elem = r(i, i);
+    
+    % Compute the product of Sq and the diagonal element
+    product = Sq * r_elem;
+    
+% L=0 (part s del hybrid)
+%this is zero   
+    
+%L=2 (d part of the hybrid)
+     A= 1i * 3 * sqrt(6) / (16 * pi); %1i *
+    % Apply the appropriate function based on the product value
+    if true %product < 1/10
+        Hsdp0(i,i,2)= A * ( (4*r_elem^2*Sq)/(15*pi^2) + (8-pi^2)*r_elem^4*Sq^3/(70*pi^4) );
+    else
+        B=1 / (Q^2 * r_elem^3);
+        C1=16 * Sq * r_elem * cos((Sq / 2) * r_elem);
+        C2=4 * (-8 + pi^2) * sin((Sq / 2) * r_elem);
+        C3=pi * (pi - Sq*r_elem) * (pi + Sq*r_elem);
+        C4=sinint((pi - Sq * r_elem) / 2) - sinint((pi + Sq * r_elem) / 2);
+        C=C1+C2+C3*C4;
+        Hsdp0(i,i,2)=A*B*C;
+    end
+end %for end
+
+end %function end
+
+
 %Transition between Hsd1->Q(l=1,m=1): HQsdtoP1
-%Only contribution for Q(l=1)
+%3 contribution for Q(l=1) this is the 3rd one
 %Sandwitch: 1st row L=0 (s) and 2nd row L=2 (d) part of the hyrbid
 function Hsdp1=HsdtoQp1trans(x,Ei,Ef,M)
 % x is the system = r in the string
@@ -303,168 +449,41 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
-%L=0 (s part of the hybrid)
-A=sqrt(3)/ (8 * pi^2);
-B=diag(diag((1 ./ (Q * r))));
-C1=0;
-C2=4 * pi  .* sin((Sq / 2) * r);
-C3=(pi - Sq*r)*(pi + Sq*r) ;
-C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
-C=C2+C3*C4;
-Hsdp1(:,:,1)=A*B*C;
-%Hsdp1(:,:,1)=(-1*sqrt(3)/(16*pi))*(1/(Q*r))*(4*sin((Sq/2)*r)+((pi^2-Q*r^2)/pi)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
 
+% Loop through each element of the diagonal matrix r
+[rows, cols] = size(r);
+Hsdp1(:,:,:)=zeros(rows,cols,2);
+for i = 1:rows
+    % Get the diagonal element
+    r_elem = r(i, i);
+    
+    % Compute the product of Sq and the diagonal element
+    product = Sq * r_elem;
+    
+% L=0 (part s del hybrid)
+%this is zero   
+    
 %L=2 (d part of the hybrid)
-A=sqrt(6)/ (32 * pi^2);
-B=diag(diag((1 ./ (Q^2 * r^3))));
-C1=48 * pi * Sq * r .* cos((Sq / 2) * r);
-C2=4 * pi * (-24 +3*pi^2 - Q*r^2)  .* sin((Sq / 2) * r);
-C3=(3*pi^4 - 4*pi^2*Q*r^2 + Q^2*r^4) ;
-C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
-C=C1+C2+C3*C4;
-Hsdp1(:,:,2)=A*B*C;
-%Hsdp1(:,:,2)=(-1*sqrt(6)/(64*pi^2))*(1/(Sq^3*r^3))*(48*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-24+3*pi^2-Q*r^2)*sin((Sq/2)*r)+(3*pi^4-4*pi^2*Q*r^2+Q^2*r^4)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
-end
+     A= 1i * 3 * sqrt(6) / (32 * pi); %1i *
+    % Apply the appropriate function based on the product value
+    if true %product < 1/10
+        Hsdp1(i,i,2)= A *( (16*r_elem^2*Sq)/(15*pi^2) - 2*(-8+pi^2)*r_elem^4*Sq^3/(105*pi^4) );
+    else
+        B=1 / (Q^2 * r_elem^3 * pi);
+        C1=-16 * pi * Sq * r_elem * cos((Sq / 2) * r_elem);
+        C2=4 * pi * (8 - pi^2 + Q*r_elem^2) * sin((Sq / 2) * r_elem);
+        C3=-(pi^2 - Q*r_elem^2)^2;
+        C4=sinint((pi - Sq * r_elem) / 2) - sinint((pi + Sq * r_elem) / 2);
+        C=C1+C2+C3*C4; 
+        Hsdp1(i,i,2)=A*B*C;
+    end
+end %for end
 
-%Transition between Hsd1->Q(l=2,m=1): HQsdtoD1
-%To Q(l=2) contribute 2 terms (m=1)
-%Sandwitch: 1st row L=0 (s) and 2nd row L=2 (d) part of the hyrbid
-function Hsdd1=HsdtoQd1trans(x,Ei,Ef,M)
-% x is the system = r in the string
-% E=Ef-Ei of the trensition
-% M = dipion invariant mass
-E=Ef-Ei;
-Sq=sqrt(E^2-M^2);
-Q=E^2-M^2;
-r=diag(x);
-Hsdd1=[];
-%L=0 (s part of the hybrid)
-Hsdd1(:,:,1)=0 *r;
-%L=2 (d part of the hybrid)
-Hsdd1(:,:,2)=0 *r;
-end
-
-%Transition between Hsd1->Q(l=2,m=2): HQsdtoD2
-%To Q(l=2) contribute 2 terms (m=2)
-%Sandwitch: 1st row L=0 (s) and 2nd row L=2 (d) part of the hyrbid
-function Hsdd2=HsdtoQd2trans(x,Ei,Ef,M)
-% x is the system = r in the string
-% E=Ef-Ei of the trensition
-% M = dipion invariant mass
-E=Ef-Ei;
-Sq=sqrt(E^2-M^2);
-Q=E^2-M^2;
-r=diag(x);
-%L=0 (s part of the hybrid)
-Hsdd2(:,:,1)=0*r;
-%L=2 (d part of the hybrid)
-Hsdd2(:,:,2)=0*r;
-end
+end %function end
 
 
-%%%%%%%%%% d2
-%Transition between Hd2->Q(l=0): HQd2toS0
-%Only contribution for Q(l=0)
-%Sandwitch directe
-function Hd2s0=Hd2toQs0trans(x,Ei,Ef,M)
-% x is the system = r in the string
-% E=Ef-Ei of the trensition
-% M = dipion invariant mass
-E=Ef-Ei;
-Sq=sqrt(E^2-M^2);
-Q=E^2-M^2;
-r=diag(x);
-Hd2s0=0*r;
-end
+%%%%%%%%%% (p/f)2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%Transition between Hd2->Q(l=1): HQd2toP0
-%To Q(l=1) contribute 2 terms (m=0)
-%Sandwitch directe
-function Hd2p0=Hd2toQp0trans(x,Ei,Ef,M)
-% x is the system = r in the string
-% E=Ef-Ei of the trensition
-% M = dipion invariant mass
-E=Ef-Ei;
-Sq=sqrt(E^2-M^2);
-Q=E^2-M^2;
-r=diag(x);
-A=sqrt(15)/ (8 * pi);
-B=diag(diag((1 ./ (Q^2 * r^3))));
-C1=16 * Sq * r .* cos((Sq / 2) * r);
-C2=4 * (-8 + pi^2)  .* sin((Sq / 2) * r);
-C3=pi*(pi - Sq * r)*(pi + Sq * r) ;
-C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
-C=C1+C2+C3*C4;
-Hd2p0=A*B*C;
-%Hd2p0=(1*sqrt(15)/(16*pi))*(1/(Q^2*r^3))*(16*pi*Sq*r*cos((Sq/2)*r)+4*(-8+pi^2)*sin((Sq/2)*r)+pi*(pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
-end
-
-%Transition between Hd2->Q(l=1): HQd2toP1
-%To Q(l=1) contribute 2 terms (m=1)
-%Sandwitch directe
-function Hd2p1=Hd2toQp1trans(x,Ei,Ef,M)
-% x is the system = r in the string
-% E=Ef-Ei of the trensition
-% M = dipion invariant mass
-E=Ef-Ei;
-Sq=sqrt(E^2-M^2);
-Q=E^2-M^2;
-r=diag(x);
-A=sqrt(30)/ (32 * pi^2);
-B=diag(diag((1 ./ (Q^2 * r^3))));
-C1=48 * pi * Sq * r .* cos((Sq / 2) * r);
-C2=4 * pi * (-24 + 3*pi^2 - Q*r^2)  .* sin((Sq / 2) * r);
-C3=(3*pi^4 - 4*pi^2*Q*r^2 + Q^2*r^4) ;
-C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
-C=C1+C2+C3*C4;
-Hd2p1=A*B*C;
-%Hd2p1=(-1*sqrt(6)/(64*pi^2))*(1/(Q^2*r^3))*(48*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-24+3*pi^2-Q*r^2)*sin((Sq/2)*r)+(3*pi^4-4*pi^2*Q*r^2+Q^2*r^4)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
-end
-
-%Transition between Hd2->Q(l=2): HQd2toD0
-%To Q(l=2) contribute 3 terms (m=0)
-%Sandwitch directe
-function Hd2d0=Hd2toQd0trans(x,Ei,Ef,M)
-% x is the system = r in the string
-% E=Ef-Ei of the trensition
-% M = dipion invariant mass
-E=Ef-Ei;
-Sq=sqrt(E^2-M^2);
-Q=E^2-M^2;
-r=diag(x);
-Hd2d0=0*r;
-end
-
-%Transition between Hd2->Q(l=2): HQd2toD1
-%To Q(l=2) contribute 3 terms (m=1)
-%Sandwitch directe
-function Hd2d1=Hd2toQd1trans(x,Ei,Ef,M)
-% x is the system = r in the string
-% E=Ef-Ei of the trensition
-% M = dipion invariant mass
-E=Ef-Ei;
-Sq=sqrt(E^2-M^2);
-Q=E^2-M^2;
-r=diag(x);
-Hd2d1=0*r;
-end
-
-%Transition between Hd2->Q(l=2): HQd2toD2
-%To Q(l=2) contribute 3 terms (m=2)
-%Sandwitch directe
-function Hd2d2=Hd2toQd2trans(x,Ei,Ef,M)
-% x is the system = r in the string
-% E=Ef-Ei of the trensition
-% M = dipion invariant mass
-E=Ef-Ei;
-Sq=sqrt(E^2-M^2);
-Q=E^2-M^2;
-r=diag(x);
-Hd2d2=0*r;
-end
-
-
-%%%%%%%%%% (p/f)2
 %Transition between Hpf2->Q(l=0,m=0): HQpftoS0
 %Only contribution for Q(l=0)
 %Sandwitch: 1st row L=1 (p) and 2nd row L=3 (f) part of the hyrbid
@@ -477,32 +496,29 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=1 (p part of the hybrid)
-A=sqrt(3)/ (8 * pi^2);
-B=diag(diag((1 ./ (Q * r))));
-C1=0;
-C2=4 * pi  .* sin((Sq / 2) * r);
-C3=(pi - Sq * r)*(pi + Sq * r);
+A= 1i / (8 * pi);
+B=diag(diag((1 ./ (Q * r * pi))));
+C1=4 * pi * sin((Sq / 2) * r);
+C3=(pi - Sq * r) * (pi + Sq * r) ;
 C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
-C=C2+C3*C4;
+C=C1+C3*C4;
 Hpfs0(:,:,1)=A*B*C;
-%Hpfs0(:,:,1)=(1*sqrt(2)/(32*pi))*(1/(Q*r))*(4*sin((Sq/2)*r)+((pi^2-Q*r^2)/pi)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
 
 %L=3 (f part of the hybrid)
-A=sqrt(2)/ (32 * pi^2);
-B=diag(diag((1 ./ (Q^2 * r^3))));
+A=1i * sqrt(3)/ (16 * pi);
+B=diag(diag((1 ./ (Q^2 * r^3 * pi))));
 C1=80 * pi * Sq * r .* cos((Sq / 2) * r);
 C2=4 * pi * (-40 +5*pi^2 - Q*r^2)  .* sin((Sq / 2) * r);
 C3=(5*pi^4 - 6*pi^2*Q*r^2 + Q^2*r^4) ;
 C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
 C=C1+C2+C3*C4;
 Hpfs0(:,:,2)=A*B*C;
-Hpfs0(:,:,2)=(1*sqrt(2)/(64*pi^2))*(1/(Q^2*r^3))*(80*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-40+5*pi^2-Q*r^2)*sin((Sq/2)*r)+(5*pi^4-6*pi^2*Q*r^2+Q^2*r^4)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
 end
 
-%Transition between Hpf2->Q(l=1,m=0): HQpftoP0
-%To Q(l=1) contribute 2 terms (m=0)
+%Transition between Hpf2->Q(l=2,m=-2): HQpftoDm
+%To Q(l=2) contribute 5 terms (m=-2)
 %Sandwitch: 1st row L=1 (p) and 2nd row L=3 (f) part of the hyrbid
-function Hpfp0=HpftoQp0trans(x,Ei,Ef,M)
+function Hpfdm=HpftoQdmtrans(x,Ei,Ef,M)
 % x is the system = r in the string
 % E=Ef-Ei of the trensition
 % M = dipion invariant mass
@@ -511,15 +527,29 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=1 (p part of the hybrid)
-Hpfp0(:,:,1)=0*r;
+A= -1i * 3 * sqrt(10) / (32 * pi);
+B=diag(diag((1 ./ (Q^2 * r^3 * pi))));
+C1=-16 * pi * Sq * r * cos((Sq / 2) * r);
+C2=4 * pi * (8 - pi^2 + Q*r^2) * sin((Sq / 2) * r);
+C3=(pi^2 - Q*r^2)^2;
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2-C3*C4;
+Hpfdm(:,:,1)=A*B*C;
 %L=3 (f part of the hybrid)
-Hpfp0(:,:,2)=0*r;
+A= -1i * sqrt(15) / (64 * pi);
+B=diag(diag((1 ./ (Q^3 * r^5 * pi))));
+C1=16 * pi * Sq * r * (240 - 5*pi^2 + Q*r^2) *cos((Sq / 2) * r);
+C2=-4 * pi * (5*(384 - 8*pi^2 + pi^4) - 2*(76 + 3*pi^2)*Q*r^2 + Q^2*r^4) * sin((Sq / 2) * r);
+C3=((pi^2 - Q*r^2)^2) * (5*pi^2 - Q*r^2);
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2+C3*C4;
+Hpfdm(:,:,2)=A*B*C;
 end
 
-%Transition between Hpf2->Q(l=1,m=1): HQpftoP1
-%To Q(l=1) contribute 2 terms (m=1)
+%Transition between Hpf2->Q(l=2,m=-1): HQpftoDn
+%To Q(l=3) contribute 5 terms (m=-1)
 %Sandwitch: 1st row L=1 (p) and 2nd row L=3 (f) part of the hyrbid
-function Hpfp1=HpftoQp1trans(x,Ei,Ef,M)
+function Hpfdn=HpftoQdntrans(x,Ei,Ef,M)
 % x is the system = r in the string
 % E=Ef-Ei of the trensition
 % M = dipion invariant mass
@@ -528,13 +558,27 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=1 (p part of the hybrid)
-Hpfp1(:,:,1)=0*r;
+A= -1i * 3 * sqrt(10) / (16 * pi);
+B=diag(diag((1 ./ (Q^2 * r^3))));
+C1=16 * Sq * r * cos((Sq / 2) * r);
+C2=4 * (-8 + pi^2) * sin((Sq / 2) * r);
+C3=pi * (pi - Sq*r) * (pi + Sq*r);
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2+C3*C4;
+Hpfdn(:,:,1)=A*B*C;
 %L=3 (f part of the hybrid)
-Hpfp1(:,:,2)=0*r;
+A= -1i * sqrt(15) / (16 * pi);
+B=diag(diag((1 ./ (Q^3 * r^5))));
+C1=16 * Sq * r * (-240 + 5*pi^2 + 2*Q*r^2) * cos((Sq / 2) * r);
+C2=4 * (5*(384 - 8*pi^2 + pi^4) - (176 + 3*pi^2)*Q*r^2) * sin((Sq / 2) * r);
+C3=pi * (5*pi^4 - 8*pi^2*Q*r^2 + 3*Q^2*r^4);
+C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
+C=C1+C2+C3*C4;
+Hpfdn(:,:,2)=A*B*C;
 end
 
 %Transition between Hpf2->Q(l=2,m=0): HQpftoD0
-%To Q(l=2) contribute 3 terms (m=0)
+%To Q(l=2) contribute 5 terms (m=0)
 %Sandwitch: 1st row L=1 (p) and 2nd row L=3 (f) part of the hyrbid
 function Hpfd0=HpftoQd0trans(x,Ei,Ef,M)
 % x is the system = r in the string
@@ -545,30 +589,28 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=1 (p part of the hybrid)
-A=sqrt(15)/ (16 * pi^2);
-B=diag(diag((1 ./ (Q^2 * r^3))));
-C1=48 * pi * Sq * r .* cos((Sq / 2) * r);
-C2=4 * pi * (-24 +3*pi^2 - Q*r^2)  .* sin((Sq / 2) * r);
-C3=(3*pi^4 - 4*pi^2*Q*r^2 + Q^2*r^4) ;
+A=1i * sqrt(10)/ (32 * pi);
+B=diag(diag((1 ./ (Q^2 * r^3 * pi))));
+C1=48 * pi * Sq * r * cos((Sq / 2) * r);
+C2=4 * pi * (-24 + 3*pi^2 - Q*r^2) * sin((Sq / 2) * r);
+C3=3*pi^4 - 4*pi^2*Q*r^2 + Q^2*r^4;
 C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
 C=C1+C2+C3*C4;
 Hpfd0(:,:,1)=A*B*C;
-%Hpfd0(:,:,1)=(1*sqrt(10)/(64*pi^2))*(1/(Q^2*r^3))*(48*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-24+3*pi^2-Q*r^2)*sin((Sq/2)*r)+(3*pi^4-4*pi^2*Q*r^2+Q^2*r^4)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
 
 %L=3 (f part of the hybrid)
-A=sqrt(10)/ (64 * pi^2);
-B=diag(diag((1 ./ (Q^3 * r^5))));
+A=1i * sqrt(15)/ (32 * pi);
+B=diag(diag((1 ./ (Q^3 * r^5 * pi))));
 C1=16 * pi * Sq * r * (-720 + 15*pi^2 + 7*Q*r^2) .* cos((Sq / 2) * r);
 C2=4 * pi * (15*(384 - 8*pi^2 + pi^4) - 8*(67 + pi^2)*Q*r^2 + Q^2*r^4)  .* sin((Sq / 2) * r);
 C3=(15*pi^6 - 23*pi^4*Q*r^2 + 9*pi^2*Q^2*r^4 - Q^3*r^6) ;
 C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
 C=C1+C2+C3*C4;
 Hpfd0(:,:,2)=A*B*C;
-%Hpfd0(:,:,2)=(1*sqrt(10)/(128*pi^2))*(1/(Q^3*r^5))*(16*pi*Sq*r*(-720+15*pi^2+7*Q*r^2)*cos((Sq/2)*r)+4*pi*(15*(384-8*pi^2+pi^4)-8*(67+pi^2)*Q*r^2+Q^2*r^4)*sin((Sq/2)*r)+(15*pi^6-23*pi^4*Q*r^2+9*pi^2*Q^2*r^4-Q^3*r^6)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
 end
 
 %Transition between Hpf2->Q(l=2,m=1): HQpftoD1
-%To Q(l=2) contribute 3 terms (m=1)
+%To Q(l=2) contribute 5 terms (m=1)
 %Sandwitch: 1st row L=1 (p) and 2nd row L=3 (f) part of the hyrbid
 function Hpfd1=HpftoQd1trans(x,Ei,Ef,M)
 % x is the system = r in the string
@@ -579,30 +621,21 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=1 (p part of the hybrid)
-A=3*sqrt(10)/ (16 * pi);
-B=diag(diag((1 ./ (Q^2 * r^3))));
-C1=16 * Sq * r .* cos((Sq / 2) * r);
-C2=4 * (-8 + pi^2)  .* sin((Sq / 2) * r);
-C3=pi*(pi - Sq * r)*(pi + Sq * r);
-C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
-C=C1+C2+C3*C4;
-Hpfd1(:,:,1)=A*B*C;
-%Hpfd1(:,:,1)=(-1*3*sqrt(10)/(64*pi^2))*(1/(Q^2*r^3))*(16*pi*Sq*r*cos((Sq/2)*r)+4*(-8+pi^2)*sin((Sq/2)*r)+pi*(pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+Hpfd1(:,:,1)=0 * r;
 
 %L=3 (f part of the hybrid)
-A=sqrt(15)/ (16 * pi^2);
+A=1i * 5 * sqrt(15)/ (16 * pi);
 B=diag(diag((1 ./ (Q^3 * r^5))));
-C1=16 * Sq * r * (-240 + 5*pi^2 + 2*Q*r^2) .* cos((Sq / 2) * r);
-C2=4 * (5*(384 - 8*pi^2 + pi^4) - (176 + 3*pi^2)*Q*r^2) .* sin((Sq / 2) * r);
-C3=pi*(5*pi^4 - 8*pi^2*Q*r^2 + 3*Q^2*r^4) ;
+C1=-16 * (-48 + pi^2) * Sq * r * cos((Sq / 2) * r);
+C2=4 * (-384 + 8*pi^2 - pi^4 + (32 + pi^2)*Q*r^2) .* sin((Sq / 2) * r);
+C3=-pi*(pi^2 - Q*r^2)^2 ;
 C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
 C=C1+C2+C3*C4;
 Hpfd1(:,:,2)=A*B*C;
-%Hpfd1(:,:,2)=(-1*sqrt(15)/(32*pi))*(1/(Q^3*r^5))*(16*Sq*r*(-240+50*pi^2+2*Q*r^2)*cos((Sq/2)*r)+(20*(384-8*pi^2+pi^4)-4*(176+3*pi^2)*Q*r^2)*sin((Sq/2)*r)+pi*(5*pi^4-8*pi^2*Q*r^2+3*Q^2*r^4)*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
 end
 
 %Transition between Hpf2->Q(l=2,m=2): HQpftoD2
-%To Q(l=2) contribute 3 terms (m=2)
+%To Q(l=2) contribute 5 terms (m=2)
 %Sandwitch: 1st row L=1 (p) and 2nd row L=3 (f) part of the hyrbid
 function Hpfd2=HpftoQd2trans(x,Ei,Ef,M)
 % x is the system = r in the string
@@ -613,24 +646,15 @@ Sq=sqrt(E^2-M^2);
 Q=E^2-M^2;
 r=diag(x);
 %L=1 (p part of the hybrid)
-A=sqrt(15)/ (32 * pi^2);
-B=diag(diag((1 ./ (Q^2 * r^3))));
-C1=-16 * pi * Sq * r .* cos((Sq / 2) * r);
-C2=4 * pi * (8 -pi^2 + Q*r^2)  .* sin((Sq / 2) * r);
-C3=(pi^2 - Q*r^2)^2 ;
-C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
-C=C1+C2-C3*C4;
-Hpfd2(:,:,1)=A*B*C;
-%Hpfd2(:,:,1)=(1*sqrt(15)/(64*pi^2))*(1/(Q^2*r^3))*(16*pi*Sq*r*cos((Sq/2)*r)+4*pi*(-8+pi^2-Q*r^2)*sin((Sq/2)*r)+(pi^2-Q*r^2)^2*(sinint((pi-Sq*r)/2)-sinint((pi+Sq*r)/2)));
+Hpfd2(:,:,1)=0*r;
 
 %L=3 (f part of the hybrid)
-A=3*sqrt(10)/ (64 * pi^2);
-B=diag(diag((1 ./ (Q^3 * r^5))));
-C1=16 * pi * Sq * r * (240 - 5*pi^2 + Q*r^2) .* cos((Sq / 2) * r);
-C2=-4 * pi * (5*(384 - 8*pi^2 + pi^4) - 2*(76 + 3*pi^2)*Q*r^2 + Q^2*r^4)  .* sin((Sq / 2) * r);
-C3=(pi^2 - Q*r^2)^2*(5*pi^2 - Q^2*r^2) ;
+A=1i * 5* sqrt(15)/ (64 * pi);
+B=diag(diag((1 ./ (Q^3 * r^5 * pi))));
+C1=16 * pi * Sq * r * (-48 + pi^2 - Q*r^2) .* cos((Sq / 2) * r);
+C2=4 * pi * (384 - 8*pi^2 + pi^4 - 2*(12 + pi^2)*Q*r^2 + Q^2*r^4)  .* sin((Sq / 2) * r);
+C3=(pi^2 - Q*r^2)^3;
 C4=sinint((pi - Sq * r) / 2) - sinint((pi + Sq * r) / 2);
 C=C1+C2+C3*C4;
 Hpfd2(:,:,2)=A*B*C;
-%Hpfd2(:,:,2)=(-1*sqrt(10)/(128*pi^2))*(1/(Q^3*r^5))*(16*pi*Sq*r*(240-5*pi^2+Q*r^2)*cos((Sq/2)*r)+-4*pi*(1920+5*pi^4-152*Q*r^2+Q^2*r^4-2*pi*(20+3*Q*r^2))*sin((Sq/2)*r)-(pi^2-Q*r^2)^2*(5*pi^2-Q*r^2)*(sinint((pi-Sq*r)/2)+sinint((pi+Sq*r)/2)));
 end

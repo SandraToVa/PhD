@@ -1,5 +1,7 @@
 
 function V=ExpectedValue(i,f,Op,initial,final,m,sin,sfin)
+%#codegen
+
 %Function to compute espected values using wavefunctions and any observable
 %Output:        - Returns a vector of positions = columns of wavefunctions initial
 %               and final (if the hybrid computed is a 3x3 matrix, 3 colums, if it is a

@@ -5,16 +5,17 @@
 
 %I need to define k1, k2 and r0
 %Per al bottomonium: 
-setk1(0.03411)
-setk2(-0.00085)
+setk1(-0.0848)
+setk2(0.0021)
 setr0(3.964)
-setL1(0.07965)
-setL3(0.3105)
+setL1(0.059)
+setL3(-0.230)
 load("dades.mat","m_b","m_c")
 setm_q(m_c)
 setspin(1)
+setl(0)
 
-[E,W,x]=Spin1Jcal0_2(m_q,spin);
+[E,W,x]=Spin1Jcal0_1(m_q,spin);
 
 %I am identifing 1+- estates with the 1,2,3 estates found:
 
@@ -99,4 +100,17 @@ end
 function setL3(val5)
 global v5
 v5 = val5;
+end
+
+%Usant la interpolació o només les llargues distàncies
+%l=1; llargues distàncies
+%l=0; interpolació
+function x6=l
+global v6
+x6=v6;
+end
+
+function setl(val6)
+global v6
+v6=val6;
 end

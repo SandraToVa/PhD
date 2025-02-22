@@ -2,12 +2,11 @@
 setr0(3.964)
 %massa
 load("dades.mat","m_c","m_b")
-setm_q(m_c)
-
+setm_q(m_b)
 
 %values (autentic)
 Min=0.27;
-Mfin=0.57;
+Mfin=0.62; %Has to be changed by hand depnending on the trasnition
 
 %Now we compute I_theta for 4s->3s for diferent M
 %|Ef-Ei|>M
@@ -22,49 +21,44 @@ Itheta=zeros(1,k+1);
 Itheta0=zeros(1,k+1);
 Itheta1=zeros(1,k+1);
 Itheta2=zeros(1,k+1);
+IthetaN=zeros(1,k+1); %N is negative =-1
+IthetaM=zeros(1,k+1); %M is dobule negative =-2
 
 n=1;
 while n<=k+1
-    %For transitions with only one option like DtoS or StoS
-    %Itheta(n)=ComputeExpValM(I,F,M(n),@DtoStrans);
+%Inser here the transition following the guide of TransitionsAdded.m
+%
+transition0=I_thetaFunctions('HQsdtoP0');
+transition1=I_thetaFunctions('HQsdtoP1');
+transitionN=I_thetaFunctions('HQsdtoPn'); %n of negative
 
-    %For transitions with diferent m, DtoD we must do the sum and average
-    %over all states (D0toD0 + etc)
-    %example for l=2->l=2
-    %Itheta(n)=ComputeExpValM(I,F,M(n),@D0toD0trans);
-    %Itheta(n)=Itheta(n)+2*ComputeExpValM(I,F,M(n),@D1toD1trans);
-    %Itheta(n)=Itheta(n)+2*ComputeExpValM(I,F,M(n),@D2toD2trans);
-    %Itheta(n)=Itheta(n)/5; 
-    %Here it is 5 because 5=(2*l+1),l=2
-    %2* because we have m=+-1 -> m=+-1 and m=+-2 -> m=+-2
+ExpValFunc=ExpValFunctions('HQ');
 
-    %Itheta0(n)=ComputeExpValM(I,F,M(n),@D0toD0trans)^2;
-    %Itheta1(n)=ComputeExpValM(I,F,M(n),@D1toD1trans)^2;
-    %Itheta2(n)=ComputeExpValM(I,F,M(n),@D2toD2trans)^2;
-   
-    transition=I_thetaFunctions('HQp0toD2');
-    ExpValFunc=ExpValFunctions('HQ');
+Itheta0(n)=ExpValFunc(3,2,M(n),transition0,1,1,true);
+Itheta1(n)=ExpValFunc(3,2,M(n),transition1,1,1,true);
+IthetaN(n)=ExpValFunc(3,2,M(n),transitionN,1,1,true);
 
-    Itheta0(n)=ExpValFunc(1,1,M(n),transition,0,2,false);
-    Itheta(n)=Itheta0(n)^2;
+%The N is not n in n(s/d)_J: remember the ordering of states for (s/d)1 and p1
 
-    %transition0=I_thetaFunctions('QQD0toD0');
-    %transition1=I_thetaFunctions('QQD1toD1');
-    %transition2=I_thetaFunctions('QQD2toD2');
+Itheta(n)=( 2*(Itheta1(n)-IthetaN(n))*conj(Itheta1(n)-IthetaN(n)) )/3;
 
-    %Itheta0(n)=ExpValFunc(3,1,M(n),transition0,2,2);
-    %Itheta1(n)=ExpValFunc(3,1,M(n),transition1,2,2);
-    %Itheta2(n)=ExpValFunc(3,1,M(n),transition2,2,2);
-    %Itheta(n)=(Itheta0(n)^2+2*Itheta1(n)^2+2*Itheta2(n)^2)/5;
 
+%%%%%
+fprintf('Number of iteration: %d / %d\n', n, k);
     n=n+1;
 
 end
 
-%graphic
-scatter(M,Itheta)
-Mtrans=M.';
-Itrans=Itheta.';
+% Crear el scatter plot
+figure; % Crear una nueva figura
+scatter(M, Itheta, 60, 'filled'); % Scatter plot con puntos llenos y tamaño 100
+
+% Cambiar los nombres de los ejes
+xlabel('Dipion mass (GeV)');
+ylabel('I_{\theta}^2 (1/GeV)');
+
+Mtrans=M';
+Itrans=Itheta';
 
  
 
