@@ -47,6 +47,7 @@ Ef(f);
 Yf=Wf(:,:,f);
 
 %The length of the wavefunction f 
+
 [numRf,~] = size(Yf);
 
 if numRi ~= numRf
