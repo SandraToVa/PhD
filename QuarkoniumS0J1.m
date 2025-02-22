@@ -25,7 +25,8 @@ system.V=@potentialMatrix;
 %disp(' ');
 %disp('Calculating eigenvalues with indices between 0 and 10:');
 t=cputime;
-kmax=7;
+%kmax=7; per a transicions
+kmax=4;
 
 
 % disp(['Number of intervals in the mesh: ' num2str(length(meshData.h))]); % number of intervals in the mesh

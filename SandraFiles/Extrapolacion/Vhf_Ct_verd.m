@@ -1,14 +1,13 @@
 %Valor r0
-setr0(3.960)
+setr0(3.964)
 %Constants ajustades
-setk1(0.12435)
-setk2(0.00395)
-
-%Fixos L1 i L3
-setL1(0.07965)
-setL3(0.3105)
+setk1(-0.018)
+setk2(0.0003)
+%Valors Lambda g
+setL1(0.059)
+setL3(-0.230)
 load("dades.mat","m_c","m_b")
-setm_q(m_c)
+setm_q(m_b)
 % l= interpolació (0), llagures distncies (1), bad long distances (else)
 setl(0)
 setspin(1) %s=1 for hybrids
@@ -17,51 +16,62 @@ setspin(1) %s=1 for hybrids
 %Programa que calcula los valors del espectre per als nivells del c
 % 2(s/d)2 and 1d2
 c=zeros(8);
+b=zeros(8);
 
 %Vector en los valors de la energia que necesito
 [aux,~,~]=QuarkoniumS0J1(m_q,spin);
 c(1)=aux(3);
+if m_q==4.8802
+    b(1)=aux(4);
+end
 [aux,~,~]=Spin1Jcal0_1(m_q,spin);
 c(2)=aux(2);
 [aux,~,~]=Spin1Jcal1_2(m_q,spin);
 c(3)=aux(3);
-[aux,~,~]=Spin1Jcal2_1(m_q,spin);
-c(4)=aux(3);
-[aux,~,~]=QuarkoniumS0J2(m_q,spin);
-c(5)=aux(2);
-[aux,~,~]=Spin1Jcal1_2(m_q,spin);
 c(6)=aux(2);
 [aux,~,~]=Spin1Jcal2_1(m_q,spin);
+c(4)=aux(3);
 c(7)=aux(2);
+[aux,~,~]=QuarkoniumS0J2(m_q,spin);
+c(5)=aux(2);
+if m_q==4.8802
+    b(5)=aux(3);
+end
+%[aux,~,~]=Spin1Jcal1_2(m_q,spin);
+%c(6)=aux(2);
+%[aux,~,~]=Spin1Jcal2_1(m_q,spin);
+%c(7)=aux(2);
 [aux,~,~]=Spin1Jcal3_2(m_q,spin);
 c(8)=aux(1);
 
-c
+c;
 
 
 
 %Per al bottom son los estats c + los estats b
 
 if m_q==4.8802
-    b=zeros(8);
-    [aux,~,~]=QuarkoniumS0J1(m_q,spin);
-    b(1)=aux(4);
+    %[aux,~,~]=QuarkoniumS0J1(m_q,spin);
+    %b(1)=aux(4);
     [aux,~,~]=Spin1Jcal0_2(m_q,spin);
     b(2)=aux(2);
     [aux,~,~]=Spin1Jcal1_1(m_q,spin);
     b(3)=aux(3);
-    [aux,~,~]=Spin1Jcal2_2(m_q,spin);
-    b(4)=aux(3);
-    [aux,~,~]=QuarkoniumS0J2(m_q,spin);
-    b(5)=aux(3);
-    [aux,~,~]=Spin1Jcal1_1(m_q,spin);
     b(6)=aux(4);
     [aux,~,~]=Spin1Jcal2_2(m_q,spin);
+    b(4)=aux(3);
     b(7)=aux(5);
+    %[aux,~,~]=QuarkoniumS0J2(m_q,spin);
+    %b(5)=aux(3);
+    %[aux,~,~]=Spin1Jcal1_1(m_q,spin);
+    %b(6)=aux(4);
+    %[aux,~,~]=Spin1Jcal2_2(m_q,spin);
+    %b(7)=aux(5);
     [aux,~,~]=Spin1Jcal3_1(m_q,spin);
     b(8)=aux(3);
 
-    b
+    b;
+    
 end
 
 %VALOR DE LA MASSA

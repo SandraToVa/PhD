@@ -1,7 +1,7 @@
-%Valor r0
-setr0(3.964)
-setL1(0.07965)
-setL3(0.3105)
+%Valor r0=3.964
+setr0(3)
+setL1(0.059)
+setL3(-0.230)
 load("dades.mat","m_c","m_b")
 setm_q(m_c)
 setspin(1)
@@ -50,19 +50,18 @@ I1=1;
 I2=1;
 results(I1,I2)=0; 
 
-chimax=40;
+chimax=1000000000;
 % Programa que busca la k òptima per a la chi^2
-for ka1=0.14:0.01:0.16
+for ka1=-0.20:0.05:-0.1
     setk1(ka1); 
     I2=1;
-    for ka2=-0.0161:0.1:-0.0160
+    for ka2=0.02:0.005:0.04
         setk2(ka2);
         chi=0;
-
-        i=0;
         %Vector en los valors de la energia que necesito
         [aux,~,~]=QuarkoniumS0J1(m_q,spin);
         a(1)=aux(1);
+        a(12)=aux(2);
         i=1;
         chi=chi+((a(i)-t(i))^2)/((e(i))^2);
         if chi >= chimax
@@ -108,6 +107,7 @@ for ka1=0.14:0.01:0.16
         
         [aux,~,~]=Spin1Jcal2_2(m_q,spin);
         a(6)=aux(1);
+        a(7)=aux(2);
         i= i + 1;
         chi=chi+((a(i)-t(i))^2)/((e(i))^2);
         if chi >= chimax
@@ -115,8 +115,8 @@ for ka1=0.14:0.01:0.16
             break
         end
         
-        [aux,~,~]=Spin1Jcal2_2(m_q,spin);
-        a(7)=aux(2);
+        %[aux,~,~]=Spin1Jcal2_2(m_q,spin);
+        %a(7)=aux(2);
         i= i + 1;
         chi=chi+((a(i)-t(i))^2)/((e(i))^2);
         if chi >= chimax
@@ -135,23 +135,7 @@ for ka1=0.14:0.01:0.16
         
         [aux,~,~]=Spin1Jcal1_1(m_q,spin);
         a(9)=aux(1);
-        i= i + 1;
-        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
-        if chi >= chimax
-            results(I1,I2)=chi;
-            break
-        end
-        
-        [aux,~,~]=Spin1Jcal1_1(m_q,spin);
         a(10)=aux(2);
-        i= i + 1;
-        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
-        if chi >= chimax
-            results(I1,I2)=chi;
-            break
-        end
-        
-        [aux,~,~]=Spin1Jcal1_1(m_q,spin);
         if m_q==1.4702
              a(11)=aux(3); %If charmonium
         end
@@ -165,8 +149,31 @@ for ka1=0.14:0.01:0.16
             break
         end
         
-        [aux,~,~]=QuarkoniumS0J1(m_q,spin);
-        a(12)=aux(2);
+        %[aux,~,~]=Spin1Jcal1_1(m_q,spin);
+        %a(10)=aux(2);
+        i= i + 1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
+        end
+        
+        %[aux,~,~]=Spin1Jcal1_1(m_q,spin);
+        %if m_q==1.4702
+        %     a(11)=aux(3); %If charmonium
+        %end
+        %if m_q==4.8802
+        %   a(11)=aux(5); %If bottomium
+        %end
+        i= i + 1;
+        chi=chi+((a(i)-t(i))^2)/((e(i))^2);
+        if chi >= chimax
+            results(I1,I2)=chi;
+            break
+        end
+        
+        %[aux,~,~]=QuarkoniumS0J1(m_q,spin);
+        %a(12)=aux(2);
         i= i + 1;
         chi=chi+((a(i)-t(i))^2)/((e(i))^2);
         if chi >= chimax
