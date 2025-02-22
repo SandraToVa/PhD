@@ -35,7 +35,7 @@ kmax=6;
 if s==0 %Quarkonium
     %number of actual states
     E=zeros(1,kmax+1);
-    tol0=5e-6;
+    tol0=4e-6;  %4e-6 gives x=81
     [EigvData,meshData]=computeEigenvalues(system,0,kmax*3,tol0);
 
     for k=0:kmax
@@ -43,16 +43,16 @@ if s==0 %Quarkonium
         E(kindex)=EigvData.eigenvalues(3*kindex)/m;
     end
 else %Hybrid
-    tol1=2e-5;   %ajust this tolerance in function of the mesh
+    tol1=5e-8;   %ajust this tolerance in function of the mesh
     [EigvData,meshData]=computeEigenvalues(system,0,kmax,tol1); 
     E=EigvData.eigenvalues/m;
 
 end
 
-for i=1:length(E)
+for en=1:length(E)
     %disp(sprintf('%-3.0f\t %-16.12f\t %-2.0e\t\t % d', EigvData.indices(i),EigvData.eigenvalues(i)/m,EigvData.errorEstimations(i),EigvData.status(i)));
-    [x,Y,YP]=computeEigenfunction(system,meshData,E(i)*m,1);
-    W(:,:,i)=Y;
+    [x,Y,YP]=computeEigenfunction(system,meshData,E(en)*m,1);
+    W(:,:,en)=Y;
 end
 
 

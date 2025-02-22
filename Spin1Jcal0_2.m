@@ -35,9 +35,8 @@ t=cputime;
 %[lam0]=parameters2
 % disp(['Time: ' num2str (cputime - t) ' sec']);
 % disp(sprintf('k \t  E_k \t\t\t\t ErrEst \t status'))
-if s==1
-    E=EigvData.eigenvalues/m;
-end
+
+E=EigvData.eigenvalues/m;
 for i=1:length(EigvData.eigenvalues)
    %disp(sprintf('%-3.0f\t %-16.12f\t %-2.0e\t\t % d', EigvData.indices(i),EigvData.eigenvalues(i)/m,EigvData.errorEstimations(i),EigvData.status(i)));
     [x,Y,YP]=computeEigenfunction(system,meshData,EigvData.eigenvalues(i),1);
@@ -262,25 +261,33 @@ function f1=Vg(x)
 
   % EFECTES HIPERFINS:
   
-  function HFP=Vpp(~) 
+   function HFP=Vpp(x) 
    % Potencial V_pp
   [m]=parameters;
   
   if m==1.4702
-  HFP=(1.12155*L3*pi^2)/(m*0.187*r0^3);
+  cf=1.12155;
+  k=0.187;
+  HFP=(cf*L3*pi^2)/(m*k*r0^3);
   else
-  HFP=(0.87897*L3*pi^2)/(m*0.187*r0^3);
+  cf=0.87897;
+  k=0.187;
+  HFP=(cf*L3*pi^2)/(m*k*r0^3);
   end
   
   end
-  function HFS=Vsp(~) 
+  function HFS=Vsp(x) 
    % Potencial Vsp
   [m]=parameters;
  
   if m==1.4702
-  HFS=(1.12155*L1*pi^2)/(m*sqrt(pi*0.187)*r0^2);
+  cf=1.12155;
+  k=0.187;
+  HFS=(cf*L1*pi^2)/(m*sqrt(pi*k)*r0^2);
   else
-  HFS=(0.87897*L1*pi^2)/(m*sqrt(pi*0.187)*r0^2);
+  cf=0.87897;
+  k=0.187;
+  HFS=(cf*L1*pi^2)/(m*sqrt(pi*k)*r0^2);
   end
   
   end
