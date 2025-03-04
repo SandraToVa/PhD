@@ -31,9 +31,9 @@ function res = FormFactor_ItoF(x)
         res = @D0toStransF;
     elseif strcmp(x, 'QQD0toS0_Fc')
         res = @D0toStransFC;    
-    elseif strcmp(x, 'QQD0toS0_Fs')
+    elseif strcmp(x, 'QQD2toS0_Fs')
         res = @D2toStransFS;
-    elseif strcmp(x, 'QQD0toS0_Fx')
+    elseif strcmp(x, 'QQD2toS0_Fx')
         res = @D2toStransFSX;
     elseif strcmp(x, 'QQD0toD0_F/')
         res = @D0toD0transF;
