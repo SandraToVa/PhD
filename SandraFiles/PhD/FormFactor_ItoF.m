@@ -24,9 +24,29 @@ function res = FormFactor_ItoF(x)
     elseif strcmp(x, 'QQP1toP1_Fc')
         res = @P1toP1transFC;
     elseif strcmp(x, 'QQP1toP1_Fs')
-        res = @P1toP1transF;
+        res = @P1toP1transFS;
     elseif strcmp(x, 'QQP1toP1_Fx')
-        res = @P1toP1transFC;
+        res = @P1toP1transFSX;
+    elseif strcmp(x, 'QQD0toS0_F/')
+        res = @D0toStransF;
+    elseif strcmp(x, 'QQD0toS0_Fc')
+        res = @D0toStransFC;    
+    elseif strcmp(x, 'QQD0toS0_Fs')
+        res = @D2toStransFS;
+    elseif strcmp(x, 'QQD0toS0_Fx')
+        res = @D2toStransFSX;
+    elseif strcmp(x, 'QQD0toD0_F/')
+        res = @D0toD0transF;
+    elseif strcmp(x, 'QQD0toD0_Fc')
+        res = @D0toD0transFC;    
+    elseif strcmp(x, 'QQD1toD1_F/')
+        res = @D1toD1transF;
+    elseif strcmp(x, 'QQD1toD1_Fc')
+        res = @D1toD1transFC;
+    elseif strcmp(x, 'QQD2toD2_F/')
+        res = @D2toD2transF;
+    elseif strcmp(x, 'QQD2toD2_Fc')
+        res = @D2toD2transFC;
     end
     disp(['Output function handle: ', func2str(res)]);
 end
