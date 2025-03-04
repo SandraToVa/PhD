@@ -1,11 +1,11 @@
 %Valor r0
 setr0(3.964)
 %Constants ajustades
-setk1(-0.0945)
-setk2(0.0033)
+setk1(-0.0580)
+setk2(0.0001)
 %Valors Lambda g
-setL1(0.07965)
-setL3(-0.3105)
+setL1(0.059)
+setL3(-0.230)
 % l= interpolació (0), llagures distncies (1), bad long distances (else)
 setl(0)
 %massa
