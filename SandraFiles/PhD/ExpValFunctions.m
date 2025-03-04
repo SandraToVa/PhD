@@ -58,6 +58,11 @@ else
      %PROBLEM WITH THE FUNCTION, x for hybrid and x for quarkonium have diferent
      %dimension. Due to ConstrucMesh?????
      V=ExpectedValue(i,f,Op,QuarkoniumS0Ji,QuarkoniumS0Jf,m_q,sin,sfin);
+
+     %Si sabem les funcions d'ona pq ens les donen i les energies utilitzem
+     %la seguent funcio
+     %V=ExpectedValueKnownWF(Wi,Wf,x,Op,s)
+
      %Only one value is diferent from zero
      EV=V;
      %[row,col]=find(V);
