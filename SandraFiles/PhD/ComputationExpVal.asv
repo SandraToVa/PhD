@@ -1,0 +1,113 @@
+%Valor r0
+setr0(3.964)
+%massa
+load("dades.mat","m_c","m_b")
+setm_q(m_c)
+
+%values (autentic)
+Min=0.27;
+Mfin=0.62; %Has to be changed by hand depnending on the trasnition
+
+%Now we compute I_theta for 4s->3s for diferent M
+%|Ef-Ei|>M
+
+%number of spaces:
+k=50;
+%M row:
+nM=(Mfin-Min)/k;
+M=Min:nM:Mfin;
+
+%spin average de els termes involucrats enla integral
+I_if_square=zeros(1,k+1);
+I_if_c_square=zeros(1,k+1);
+I_if_0c_square=zeros(1,k+1);
+I_if_s_square=zeros(1,k+1);
+
+%directament les I_if sense square
+I_if=zeros(1,k+1);
+I_if_c=zeros(1,k+1);
+I_if_s=zeros(1,k+1);
+
+n=1;
+while n<=k+1
+%Inser here the transition following the guide of TransitionsAdded.m
+%
+%només 1 contribució Ji=0,m=0->Jf=0,m'=0
+%al spin average contribueixen els termes I^2, I_c^2 i I*I_c
+
+%canviar
+%estats inciials i finals
+Ni=n;
+Nf=n';
+
+transition=FormFactor_ItoF('QQS0toS0_F/');
+transitionC=FormFactor_ItoF('QQS0toS0_Fc');
+
+ExpValFunc=ExpValFunctions('QQ');
+
+I_if(n)=ExpValFunc(Ni,Nf,M(n),transition,0,0);
+I_if_c(n)=ExpValFunc(Ni,Nf,M(n),transition_c,0,0);
+
+%el spin average = com nomes hi ha 1 m possible per a la transicio
+%directament per a cada
+
+I_if_square(n)=I_if(n)^2;
+I_if_c_square(n)=I_if_c(n)^2;
+I_if_0c_square(n)=I_if(n)*I_if_c(n);
+
+%%%%%
+fprintf('Number of iteration: %d / %d\n', n, k);
+    n=n+1;
+
+end
+
+% Crear el scatter plot
+figure; % Crear una nueva figura
+scatter(M, Iif, 60, 'filled'); % Scatter plot con puntos llenos y tamaño 100
+
+% Cambiar los nombres de los ejes
+xlabel('Dipion mass (GeV)');
+ylabel('I_{\theta}^2 (1/GeV)');
+
+Mtrans=M';
+Itrans=Iif';
+
+ 
+
+
+
+%VALOR DE LA MASSA
+%m=1.4702; charm
+%m=4.8802; bottom
+function x0=m_q
+global v0
+x0=v0;
+end
+
+function setm_q(val0)
+global v0
+v0=val0;
+end
+
+% VALOR DEL SPIN
+function x7=spin
+global v7
+x7=v7;
+end 
+
+function setspin(val7)
+global v7
+v7 = val7;
+end
+
+% VALOR DEL r0
+function x3=r0
+global v3
+x3=v3;
+end 
+
+function setr0(val3)
+global v3
+v3 = val3;
+end
+
