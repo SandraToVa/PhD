@@ -67,6 +67,9 @@ end
 %First all the functions in Quarkonium -> Quarkonium +2Pions transitions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%PREGUNTA IMPORTANT%%%%%%%
+%s'ha de multiplicar x2 aqui el resultat? Per el h.c.?
+
 % s->s
 function StoS=StoStrans
 %només 1 contribució Ji=0,m=0->Jf=0,m'=0
@@ -164,49 +167,40 @@ I_if_s2(n)=ExpValFunc(Ni,Nf,M(n),transitionS2,2,0);
 I_if_square(n)=(I_if0(n)^2)/5;
 I_if_c_square(n)=(I_if_c0(n)^2)/5;
 I_if_0c_square(n)=(I_if0(n)*I_if_c0(n))/5;
-I_if_s_square(n)=(I_if_s2(n)^2)/5;
+I_if_s_square(n)=(I_if_c0(n)^2)/5;
 
+%1 contribució m=0->m'=0
+%sumatori i average sobre estat final i incial
+
+transition0=I_thetaFunctions('QQD0toS0');
+
+ExpValFunc=ExpValFunctions('QQ');
+
+Itheta0(n)=ExpValFunc(N,N',M(n),transition0,2,0);
+
+Itheta(n)=(Itheta0(n)^2)/5;
 
 end
 
 % d->d
 function DtoD=DtoDtrans
-% 5 contributions: m=0->m'=0, m=1->m'=1 (estes dos son la mateixa)
-% m=-1->m'=-1, m=+-2->m'=+-2 for the I, Ic form factors. We will ned a spin average
-% (sumatori sobre estats finals i average sobre inicals)
+%5 contribucions m=0->m'=0, m=+-1->m'=+-1 (+- son la mateixa),
+%m=+-2->m'=+-2
+%sumatori sobre estats finals i average sobre inicals
 
-%canviar
-%estats inciials i finals
-Ni=n;
-Nf=n';
-
-%m=0
-transition0=FormFactor_ItoF('QQD0toD0_F/');
-transitionC0=FormFactor_ItoF('QQD0toD0_Fc');
-%m=1
-transition1=FormFactor_ItoF('QQD1toD1_F/');
-transitionC1=FormFactor_ItoF('QQD1toD1_Fc');
-%m=1
-transition2=FormFactor_ItoF('QQD2toD2_F/');
-transitionC2=FormFactor_ItoF('QQD2toD2_Fc');
+transition0=I_thetaFunctions('QQD0toD0');
+transition1=I_thetaFunctions('QQD1toD1');
+transition2=I_thetaFunctions('QQD2toD2');
 
 ExpValFunc=ExpValFunctions('QQ');
 
-I_if0(n)=ExpValFunc(Ni,Nf,M(n),transition0,2,2);
-I_if_c0(n)=ExpValFunc(Ni,Nf,M(n),transitionC0,2,2);
-I_if1(n)=ExpValFunc(Ni,Nf,M(n),transition1,2,2);
-I_if_c1(n)=ExpValFunc(Ni,Nf,M(n),transitionC1,2,2);
-I_if2(n)=ExpValFunc(Ni,Nf,M(n),transition2,2,2);
-I_if_c2(n)=ExpValFunc(Ni,Nf,M(n),transitionC2,2,2);
+Itheta0(n)=ExpValFunc(N,N',M(n),transition0,2,2);
+Itheta1(n)=ExpValFunc(N,N',M(n),transition1,2,2);
+Itheta2(n)=ExpValFunc(N,N',M(n),transition2,2,2);
 
-%el spin average
-
-I_if_square(n)=(I_if0(n)^2 + 2*I_if1(n)^2 + 2*I_if2(n)^2)/5; % *2 because trans from +-1 to +-1 and from +-2 to +-2
-I_if_c_square(n)=(I_if_c0(n)^2 + 2*I_if_c1(n)^2 + 2*I_if_c2(n)^2)/5;
-I_if_0c_square(n)=(I_if0(n)*I_if_c0(n) + 2*I_if1(n)*I_if_c1(n) + 2*I_if2(n)*I_if_c2(n))/5;
+Itheta(n)=(Itheta0(n)^2+2*Itheta1(n)^2+2*Itheta2(n)^2)/5;
 
 end
-
 
 %First all the functions in Quarkonium -> Quarkonium +2Pions transitions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
