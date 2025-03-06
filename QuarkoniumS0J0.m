@@ -25,8 +25,8 @@ system.V=@potentialMatrix;
 %disp(' ');
 %disp('Calculating eigenvalues with indices between 0 and 10:');
 t=cputime;
-%kmax=6; transicions
-kmax=1;
+kmax=6; % for transicions
+%kmax=1; %for espectrum
 
 % disp(['Number of intervals in the mesh: ' num2str(length(meshData.h))]); % number of intervals in the mesh
 %[lam0]=parameters2
@@ -40,9 +40,9 @@ if s==0 %Quarkonium
     %number of actual states
     E=zeros(1,kmax+1);
     %tol0=2e-7; %for sd hybrid
-    %tol0=6e-7; %for d quarkonium bottom
-    tol0=2e-7;  %for d quarkonium charm
-    %tol0=5e-6; %for s quarkonium
+    %tol0=5e-6; %for s->s/d->d quarkonium x=62
+    tol0=6e-7; %for d->s (bottom) x=90
+    %tol0=2e-7;  %for d->s (charm) x=78
     [EigvData,meshData]=computeEigenvalues(system,0,kmax*3,tol0);
 
     for k=0:kmax
