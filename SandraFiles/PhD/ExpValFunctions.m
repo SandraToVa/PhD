@@ -49,7 +49,7 @@ else
 %The x must be the same. It is a problem of tolerance if not
     if length(xi)~=length(xf)
      disp('Change tolerance:');
-     disp(length(xi)-length(xf));
+     disp([length(xi), length(xf), length(xi)-length(xf)]);
     else
      x=xi; %The same for xi and xf same x
      Op=trans(x,Ei,Ef,M);
