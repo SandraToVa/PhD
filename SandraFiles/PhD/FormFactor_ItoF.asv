@@ -218,11 +218,11 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 r=diag(x);
 %Aproximation
-Fds00=-(r^3*Sq^2)/(72*sqrt(5));
+%Fds00=-(r^3*Sq^2)/(72*sqrt(5));
 %Hole function
 A=diag(diag((1 ./ (r.^2 .* Sq.^3))));
 B = -(sqrt(5) / 2) * (6 * r .* Sq .* cos((Sq / 2) .* r) - 12 .* sin((Sq / 2) .* r) + r.^2 .* Sq^2 .* sinint((Sq / 2) .* r));
-%Fds00=A*B;
+Fds00=A*B;
 end
 
 %Fc (l=2,m=0 -> l=0,m=0)
@@ -303,7 +303,7 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 r=diag(x);
 %Aproximation
-%FCdd00= (11/42)*r -(r^3*Sq^2)/112;
+%FCdd00= 11*r/42 -(r^3*Sq^2)/112;
 %Hole function
 A=diag(diag((1 ./ (r.^6 .* Sq.^7))));
 B = -10 * (r .* Sq .* (4320 - 144 * r.^2 .* Sq.^2 + r.^4 .* Sq.^4) .* cos((Sq / 2) .* r) - 2 .* (4320 - 504 * r.^2 .* Sq.^2 + 7 * r.^4 .* Sq.^4) .* sin((Sq / 2) .* r));
@@ -335,7 +335,7 @@ E=Ef-Ei;
 Sq=sqrt(E^2-M^2);
 r=diag(x);
 %Aproximation
-%FCdd11= (3/14)*r -(5*r^3*Sq^2)/1008;
+%FCdd11= 3*r/14 -(5*r^3*Sq^2)/1008;
 %Hole function
 A=diag(diag((1 ./ (r.^6 .* Sq.^7))));
 B = -60 * (2 * r .* Sq .* (-240 + 7 * r.^2 .* Sq.^2) .* cos((Sq / 2) .* r) + (960 - 108 * r.^2 .* Sq.^2 + r.^4 .* Sq.^4) .* sin((Sq / 2) .* r));
