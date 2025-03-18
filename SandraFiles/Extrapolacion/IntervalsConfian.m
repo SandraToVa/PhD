@@ -5,7 +5,8 @@ setL3(-0.230)
 load("dades.mat","m_c","m_b")
 setm_q(m_c)
 setspin(1)
-% l= interpolació (0), llagures distncies (1), bad long distances (else)
+% l= interpolació (0), llagures distncies (1), bad long distances (2), Vhf
+% partial A (3), Vhf2 partial B (4)
 setl(0)
 
 %Vector de valors de E teòriques
@@ -24,6 +25,9 @@ t(11)=4.5136;
 t(12)=4.1436;
 t(13)=4.2306;
 t(14)=4.2516;
+
+%Es pot fer +DeltaA=0.00001 i +DeltaB=0.00001 o restant
+%Ara esta fet com si es restes.
 
 %Primer calculem l'espectre en la A i B òptimes - f(i) -
 setk1(-0.0848)
@@ -110,7 +114,7 @@ fprintf('c,');
 
 %Espectre A+DeltaA,B - fa(i) - 
 
-setk1(-0.08479)
+setk1(-0.08481)
 setk2(0.0021)
 
 [aux,~,~]=QuarkoniumS0J1(m_q,spin);
@@ -153,7 +157,7 @@ fprintf('fa,');
 %Espectre A,B+DeltaB - fb(i) -
 
 setk1(-0.0848)
-setk2(0.00211)
+setk2(0.00209)
 
 %Vector en los valors de la energia que necesito
 [aux,~,~]=QuarkoniumS0J1(m_q,spin);
@@ -197,9 +201,11 @@ fprintf('fb,');
 
 a=zeros(1,14);
 b=zeros(1,14);
+aminus=zeros(1,14);
+bminus=zeros(1,14);
 for i=1:14
-    a(i)=(fa(i)-f(i))/0.00001;
-    b(i)=(fb(i)-f(i))/0.00001;
+    a(i)=(fa(i)-f(i))/(-0.00001);
+    b(i)=(fb(i)-f(i))/(-0.00001);
 end
 
 fprintf('a,b'); 
@@ -229,8 +235,10 @@ disp(ci);
 %millors valors per a p10 i p01
 %columna del mig interval A p10
 %tercer columna intervla B p01
-p10=-0.075;
-p01=0.001;
+%p10=-0.075;
+%p01=0.001;
+p10=-0.0848;
+p01=0.0021;
 
 
 %Ara caclulem l'espectre amb E_i=c_i+b_iB+a_iA
