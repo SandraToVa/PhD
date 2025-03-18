@@ -177,7 +177,7 @@ if s==0
 end
   
 if s==1
-  % CAS HYBRIT QUARKONIUM P^(+,0,-)
+  % CAS HYBRIT QUARKONIUM P^(-,+,0)
   for i=1:4 
   if j==0 
       r(1,1,i)=G(x(i),j);
@@ -264,7 +264,7 @@ function f1=Vg(x)
 
   function M4=B(x,j)
   [m]=parameters;
-  M4=m*Vq(x)*sqrt (j*(j+1))/(2*j+1);
+  M4=m*Vq(x)*sqrt(j*(j+1))/(2*j+1);
   end
 
   function M5=CC(x,j)

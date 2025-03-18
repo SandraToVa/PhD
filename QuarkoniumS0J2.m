@@ -207,7 +207,7 @@ function f1=Vg(x)
   end
   k_g=0.489;   %Full potential
   %k_g=0;  %Long distances
-  f1=-k_g/x+0.187*x+Eo;  
+  f1=-k_g/x+0.187*x+Eo; 
   end
 
   function f2=Vs(x)
