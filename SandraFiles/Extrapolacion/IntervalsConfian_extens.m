@@ -10,7 +10,8 @@ setL3(-0.230)
 load("dades.mat","m_c","m_b")
 setm_q(m_c)
 setspin(1)
-% l= interpolació (0), llagures distncies (1), bad long distances (else)
+% l= interpolació (0), llagures distncies (1), bad long distances (2), Vhf
+% partial A (3), Vhf2 partial B (4)
 setl(0)
 
 %Primer calculem l'espectre en la A i B òptimes - f(i) -

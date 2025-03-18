@@ -1,16 +1,17 @@
 %Valor r0
 setr0(3.964)
 %Constants ajustades
-setk1(-0.0580)
-setk2(0.0001)
+setk1(-0.0132)
+setk2(-0.0017)
 %Valors Lambda g
 setL1(0.059)
 setL3(-0.230)
-% l= interpolació (0), llagures distncies (1), bad long distances (else)
+% l= interpolació (0), llagures distncies (1), bad long distances (2), Vhf
+% partial A (3), Vhf2 partial B (4)
 setl(0)
 %massa
 load("dades.mat","m_c","m_b")
-setm_q(m_c)
+setm_q(m_b)
 setspin(1) %s=1 for hybrids
 
 %Totes les E en GeV
