@@ -32,16 +32,7 @@ system.V=@potentialMatrix;
 %disp('Calculating eigenvalues with indices between 0 and 10:');0-3; per a
 %transicons 0-5
 t=cputime;
-if l==0||l==1||l==2
-%tolerance for all the computations
-    tol=5e-7; %x=123
-elseif l==3
-%tolerance for a computation
-    tol=8.5e-9; %x_a=123
-%tolerance for b computation
-elseif l==4
-    tol=1.5e-6; %x_b=123
-end
+tol=5e-7; %x=123
 [EigvData,meshData]=computeEigenvalues(system,0,2,tol);
 
 % disp(['Number of intervals in the mesh: ' num2str(length(meshData.h))]); % number of intervals in the mesh
@@ -254,56 +245,32 @@ function f1=Vg(x)
   
   function M1=F(x,j)
   [m]=parameters;
-  if l==3||l==4
-      M1=0;
-  else
-    M1=(j*(j+1))/(x.^2)+m*Vp(x);
-  end
+  M1=(j*(j+1))/(x.^2)+m*Vp(x);
   end
 
   function M2=R(x,j)
   [m]=parameters;
-  if l==3||l==4
-      M2=0;
-  else
-      M2=(j*(j+1))/(x.^2)+m*Vg(x);
-  end
+  M2=(j*(j+1))/(x.^2)+m*Vg(x);
   end
 
   function M3=A(x,j)
   [m]=parameters;
-  if l==3||l==4
-      M3=0;
-  else
-      M3=(j*(j-1))/(x.^2)+m*Vq(x)*(j+1)/(2*j+1)+m*Vs(x);
-  end
+  M3=(j*(j-1))/(x.^2)+m*Vq(x)*(j+1)/(2*j+1)+m*Vs(x);
   end
 
   function M4=B(x,j)
   [m]=parameters;
-  if l==3||l==4
-      M4=0;
-  else
-      M4=m*Vq(x)*sqrt (j*(j+1))/(2*j+1);
-  end
+  M4=m*Vq(x)*sqrt (j*(j+1))/(2*j+1);
   end
 
   function M5=CC(x,j)
   [m]=parameters;
-  if l==3||l==4
-      M5=0;
-  else
-      M5=((j+1)*(j+2))/(x.^2)+m*Vq(x)*(j)/(2*j+1)+m*Vs(x);
-  end
+  M5=((j+1)*(j+2))/(x.^2)+m*Vq(x)*(j)/(2*j+1)+m*Vs(x);
   end
 
   function M6=G(x,j)
   [m]=parameters;
-  if l==3||l==4
-      M6=0;
-  else
-      M6=2/(x.^2)+m*Vs(x);
-  end
+  M6=2/(x.^2)+m*Vs(x);
   end
 
   %----------------------------------------------------------------
@@ -357,10 +324,6 @@ function f1=Vg(x)
        HF1=((Vsa/6)*(r0^3/x.^3)-(1/3)*Vsb*(r0^2/x.^2))*hevi;
    elseif l==2 %Bad long distances:
        HF1=(Vsa/6)-(1/3)*Vsb;
-   elseif l==3 %Derivative of Vhf with respect of A
-       HF1=1./(1+(x./r0).^5);
-   elseif l==4 %Derivative of Vhf2 with respect of B (Vhf doen't change)
-       HF1=0;
    end
   end  
   
@@ -402,10 +365,6 @@ end
        HF2=-(1/2)*( Vsa*(r0^3/x.^3) + Vsb*(r0^2/x.^2) )*hevi;
    elseif l==2 %Bad long distances:
        HF2=-(1/2)*( Vsa + Vsb );
-   elseif l==3 %Derivative of Vhf with respect of A (Vhf2 doen't change)
-       HF2=0;
-   elseif l==4 %Derivative of Vhf2 with respect of B 
-       HF2=(x.^2) ./ (1+(x./r0).^7);
    end
   end 
   
