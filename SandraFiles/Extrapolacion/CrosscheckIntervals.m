@@ -14,6 +14,13 @@
 %hiperfine hamiltonian
 %For the corresponding state I create a matrix with the partial of the
 %hyperfine potential multipied by the matrix (8) and (9) in the paper
+% For p1 and (p/f)2 (2+-) the result is very different we see that they are
+% very mixed so instead of the partial matrix i used the full matrix
+% including both states in both of them
+
+% CONCLUSION: the reasults are not similar enough. Linearizing the problem
+% was an error. We need to compute the errors in another way. Finding A and
+% B for lattice data +- lattice errors.
 
 
 setr0(3.964)
@@ -98,10 +105,13 @@ aux_matrix2 = -2*[0, -sqrt(2)/3; -sqrt(2)/3, -2/3];   %matrix that multiplies Vh
 % State 1-+ (s/d)1
 [aux,auxwf,x]=Spin1Jcal1_2(m_q,spin);
 E(3)=aux(1);
+%wf{3}=auxwf(:, :, 1);
 wf{3}=auxwf(1:2, :, 1);
 xvector{3}=x;  
 aux_matrix = [2, 0; 0, -1];    %matrix that multiplies Vhf
 aux_matrix2 = -2*[0, (sqrt(1/2)-sqrt(2))/3;(sqrt(1/2)-sqrt(2))/3, 2/3];   %matrix that multiplies Vhf2
+%aux_matrix = [2, 0, 0; 0, -1, -sqrt(3); 0, -sqrt(3), 1];
+%aux_matrix2 = -2*[0, (sqrt(1/2)-sqrt(2))/3, sqrt(1/6);(sqrt(1/2)-sqrt(2))/3, 2/3, 0; sqrt(1/6), 0, -1/3];
 [Hmatrix_a{3}, Hmatrix_b{3}] = computeHmatrix(2,x,aux_matrix,aux_matrix2);
 [final_a(3),final_b(3)]=computeABstate(Hmatrix_a{3},Hmatrix_b{3},wf{3});
 
@@ -109,9 +119,12 @@ aux_matrix2 = -2*[0, (sqrt(1/2)-sqrt(2))/3;(sqrt(1/2)-sqrt(2))/3, 2/3];   %matri
 [aux,auxwf,x]=Spin1Jcal2_1(m_q,spin);
 E(4)=aux(1);
 wf{4}=auxwf(1:2, :, 1);
+%wf{4}=auxwf(:, :, 1);
 xvector{4}=x;
 aux_matrix = [-2, 0; 0, 1];     %matrix that multiplies Vhf
 aux_matrix2 = -(2/3)*[0, 1;1, 1];  %matrix that multiplies Vhf2
+%aux_matrix = [-2, 0, 0, 0, 0; 0, 1, -3*sqrt(3/5), 0, 0; 0, -3*sqrt(3/5), 1/3, -(4/3)*sqrt(7/5), 0; 0, 0,  -(4/3)*sqrt(7/5), 8/3, 0; 0, 0, 0, 0, 1];
+%aux_matrix2 = -(2/3)*[0, 1, 0, 0, 0;1, 1, 0, 0, 0; 0, 0, 0, 0, 0; 0, 0, 0, 0, 0; 0, 0, 0, 0, 0];
 [Hmatrix_a{4}, Hmatrix_b{4}] = computeHmatrix(2,x,aux_matrix,aux_matrix2);
 [final_a(4),final_b(4)]=computeABstate(Hmatrix_a{4},Hmatrix_b{4},wf{4});
 
@@ -128,6 +141,7 @@ aux_matrix2 = 4/3;   %matrix that multiplies Vhf2
 [final_a(6),final_b(6)]=computeABstate(Hmatrix_a{6},Hmatrix_b{6},wf{6});
 
 % State 1+- p1
+% Per que doni millor s'hauria d'incloure el mixing en (p/f)2 i p0 (1+-)
 [aux,auxwf,x]=Spin1Jcal1_1(m_q,spin);
 E(7)=aux(1);
 wf{7}=auxwf(2, :, 1);
@@ -138,21 +152,23 @@ aux_matrix2 = 2/3;   %matrix that multiplies Vhf2
 [final_a(7),final_b(7)]=computeABstate(Hmatrix_a{7},Hmatrix_b{7},wf{7});
 
 % State 2+- p1
+% Incloen lo mixing en (p/f)2 (2+-)
 [aux,auxwf,x]=Spin1Jcal2_2(m_q,spin);
 E(8)=aux(1);
-wf{8}=auxwf(1, :, 1);
+wf{8}=auxwf(1:3, :, 1);
 xvector{8}=x;
-aux_matrix = -1;      %matrix that multiplies Vhf
-aux_matrix2 = -2/3;   %matrix that multiplies Vhf2
-[Hmatrix_a{8}, Hmatrix_b{8}] = computeHmatrix(1,x,aux_matrix,aux_matrix2);
+aux_matrix = [-1, -sqrt(3), 0; -sqrt(3), 1, 0; 0, 0, -2/3];      %matrix that multiplies Vhf
+aux_matrix2 = [-2/3, 0, 0; 0, 0, 0; 0, 0, 0];   %matrix that multiplies Vhf2
+[Hmatrix_a{8}, Hmatrix_b{8}] = computeHmatrix(3,x,aux_matrix,aux_matrix2);
 [final_a(8),final_b(8)]=computeABstate(Hmatrix_a{8},Hmatrix_b{8},wf{8});
 
 disp('States p1 computed');
 
 % State 1+- (p/f)2
+% Per que doni millor s'hauria d'incloure el mixing en p1 i p0 (1+-)
 [aux,auxwf,x]=Spin1Jcal1_1(m_q,spin);
-E(10)=aux(1);
-wf{10}=auxwf(3:4, :, 1);
+E(10)=aux(2);
+wf{10}=auxwf(3:4, :, 2);
 xvector{10}=x;
 aux_matrix = [3, 0; 0, -2];    %matrix that multiplies Vhf
 aux_matrix2 = -(2/5)*[1, -sqrt(3/2);-sqrt(3/2), -8/3];   %matrix that multiplies Vhf2
@@ -160,13 +176,14 @@ aux_matrix2 = -(2/5)*[1, -sqrt(3/2);-sqrt(3/2), -8/3];   %matrix that multiplies
 [final_a(10),final_b(10)]=computeABstate(Hmatrix_a{10},Hmatrix_b{10},wf{10});
 
 % State 2+- (p/f)2
+% Incloen lo mixing en p1 (2+-)
 [aux,auxwf,x]=Spin1Jcal2_2(m_q,spin);
-E(11)=aux(1);
-wf{11}=auxwf(2:3, :, 1);
+E(11)=aux(2);
+wf{11}=auxwf(1:3, :, 2);
 xvector{11}=x;
-aux_matrix = [2, 0; 0, -2/3];    %matrix that multiplies Vhf
-aux_matrix2 = -(2/5)*[1/3, sqrt(2/3)-sqrt(3/2);sqrt(2/3)-sqrt(3/2), -8/9];  %matrix that multiplies Vhf2
-[Hmatrix_a{11}, Hmatrix_b{11}] = computeHmatrix(2,x,aux_matrix,aux_matrix2);
+aux_matrix = [-1, -sqrt(3), 0; -sqrt(3), 1, 0; 0, 0, -2/3];    %matrix that multiplies Vhf
+aux_matrix2 = -(2/5)*[0, 0, 0; 0, 1/3, sqrt(2/3)-sqrt(3/2);0, sqrt(2/3)-sqrt(3/2), -8/9];  %matrix that multiplies Vhf2
+[Hmatrix_a{11}, Hmatrix_b{11}] = computeHmatrix(3,x,aux_matrix,aux_matrix2);
 [final_a(11),final_b(11)]=computeABstate(Hmatrix_a{11},Hmatrix_b{11},wf{11});
 
 % State 3+- (p/f)2
@@ -182,9 +199,11 @@ aux_matrix2 = -(2/5)*[-2/3, sqrt(2/3);sqrt(2/3), 16/9];  %matrix that multiplies
 disp('States (p/f)2 computed');
 
 % State 1+- p1
+% Per tal que no doni zero s'hauria d'incloure el mixing en p1 i (p/f)2
+% (1+-)
 [aux,auxwf,x]=Spin1Jcal1_1(m_q,spin);
-E(14)=aux(1);
-wf{14}=auxwf(1, :, 1);
+E(14)=aux(3);
+wf{14}=auxwf(1, :, 3);
 xvector{14}=x;
 aux_matrix = 0;     %matrix that multiplies Vhf
 aux_matrix2 = 0;   %matrix that multiplies Vhf2
