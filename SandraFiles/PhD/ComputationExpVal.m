@@ -6,12 +6,12 @@ setm_q(m_c)
 
 %values (autentic)
 Min=0.27;
-Mfin=0.62; %Has to be changed by hand depnending on the trasnition
+Mfin=0.8; %Has to be changed by hand depnending on the trasnition
 
 %Now we compute I_theta for 4s->3s for diferent M
 %|Ef-Ei|>M
 
-%number of spaces:
+%number of spaces:n
 k=50;
 %M row:
 nM=(Mfin-Min)/k;
@@ -38,28 +38,41 @@ while n<=k+1
 %Inser here the transition following the guide of TransitionsAdded.m
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
-%només 1 contribució Ji=0,m=0->Jf=0,m'=0
-%al spin average contribueixen els termes I^2, I_c^2 i I*I_c
+% 1 contribution: m=0->m'=0 for the I, Ic form factors
+
+% 1 contribution: m=+2->m'=0 for the Ix and the same m=-2->m'=0 for the
+% Is case
 
 %canviar
 %estats inciials i finals
-Ni=n;
-Nf=n';
+Ni=3;
+Nf=1;
 
-transition=FormFactor_ItoF('QQS0toS0_F/');
-transitionC=FormFactor_ItoF('QQS0toS0_Fc');
+%m=0
+transition0=FormFactor_ItoF('QQD0toD0_F/');
+transitionC0=FormFactor_ItoF('QQD0toD0_Fc');
+%m=1
+transition1=FormFactor_ItoF('QQD1toD1_F/');
+transitionC1=FormFactor_ItoF('QQD1toD1_Fc');
+%m=1
+transition2=FormFactor_ItoF('QQD2toD2_F/');
+transitionC2=FormFactor_ItoF('QQD2toD2_Fc');
 
 ExpValFunc=ExpValFunctions('QQ');
 
-I_if(n)=ExpValFunc(Ni,Nf,M(n),transition,0,0);
-I_if_c(n)=ExpValFunc(Ni,Nf,M(n),transition_c,0,0);
+I_if0(n)=ExpValFunc(Ni,Nf,M(n),transition0,2,2);
+I_if_c0(n)=ExpValFunc(Ni,Nf,M(n),transitionC0,2,2);
+I_if1(n)=ExpValFunc(Ni,Nf,M(n),transition1,2,2);
+I_if_c1(n)=ExpValFunc(Ni,Nf,M(n),transitionC1,2,2);
+I_if2(n)=ExpValFunc(Ni,Nf,M(n),transition2,2,2);
+I_if_c2(n)=ExpValFunc(Ni,Nf,M(n),transitionC2,2,2);
 
-%el spin average = com nomes hi ha 1 m possible per a la transicio
-%directament per a cada
+%el spin average
 
-I_if_square(n)=I_if(n)^2;
-I_if_c_square(n)=I_if_c(n)^2;
-I_if_0c_square(n)=I_if(n)*I_if_c(n);
+I_if_square(n)=(I_if0(n)^2 + 2*I_if1(n)^2 + 2*I_if2(n)^2)/5; % *2 because trans from +-1 to +-1 and from +-2 to +-2
+I_if_c_square(n)=(I_if_c0(n)^2 + 2*I_if_c1(n)^2 + 2*I_if_c2(n)^2)/5;
+I_if_0c_square(n)=(I_if0(n)*I_if_c0(n) + 2*I_if1(n)*I_if_c1(n) + 2*I_if2(n)*I_if_c2(n))/5;
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fprintf('Number of iteration: %d / %d\n', n, k);
@@ -76,8 +89,8 @@ Itrans_0c=I_if_0c_square';
 Itrans_s=I_if_s_square';
 
 % The following code is to create .txt files where the variables are stored
-baseName = 'QQcharm_3s-2s';
-folderPath = '/Users/sandra/Documents/Doctorat/Projectes\ PhD/Transicions\ a\ 2\ pions/Ordre\ més\ baix\ del\ Lagrangià/TransitionData';
+baseName = 'QQcharm_3d-1d';
+folderPath = '/Users/sandra/Documents/Doctorat/Projectes PhD/Transicions a 2 pions/Lower order Lagrangian/TransitionData';
 
 fileName = fullfile(folderPath, sprintf('%s.txt', baseName));
 fileName_c = fullfile(folderPath, sprintf('%s_c.txt', baseName));
@@ -102,9 +115,9 @@ fprintf(file_0c, '%6s %12s\n', 'M', 'I_if*I_if_c');
 
 % Wirthe the two columns
 for i = 1:length(M)
-    fprintf(file,    '%.4f %12.8f\n', M(i), I_if_square(i));
-    fprintf(file_c,  '%.4f %12.8f\n', M(i), I_if_c_square(i));
-    fprintf(file_0c, '%.4f %12.8f\n', M(i), I_if_0c_square(i));
+    fprintf(file,    '%.4f %.15f\n', M(i), I_if_square(i));
+    fprintf(file_c,  '%.4f %.15f\n', M(i), I_if_c_square(i));
+    fprintf(file_0c, '%.4f %.15f\n', M(i), I_if_0c_square(i));
 end
 
 
@@ -118,7 +131,7 @@ if any(I_if_s_square)
     file_s = fopen(fileName_s, 'w');
     fprintf(file_s, '%6s %12s\n', 'M', 'I_if_s^2');
     for i = 1:length(M)
-        fprintf(file_s, '%.4f %12.8f\n', M(i), I_if_s_square(i));
+        fprintf(file_s, '%.4f %.15f\n', M(i), I_if_s_square(i));
     end
     fclose(file_s);
 end
