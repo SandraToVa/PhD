@@ -5,8 +5,7 @@ setL3(-0.230)
 load("dades.mat","m_c","m_b")
 setm_q(m_c)
 setspin(1)
-% l= interpolació (0), llagures distncies (1), bad long distances (2), Vhf
-% partial A (3), Vhf2 partial B (4)
+% l= interpolació (0), llagures distncies (1), bad long distances (2)
 setl(0)
 
 %Ajust amb els etsats rojos (1-4) i amb els blaus (5-14)
@@ -47,7 +46,10 @@ e(12)=0.0256;
 e(13)=0.0326;
 e(14)=0.0346; 
 
-%Calcul de A+ i B+
+% AFTER THE CROSSCHECK: the reasults are not similar enough. Linearizing the problem
+% was an error. We need to compute the errors in another way. Finding A and
+% B for lattice data +- lattice errors.
+% Calcul de A+ i B+
 t=t-e;
 
 I1=1;
@@ -56,10 +58,10 @@ results(I1,I2)=0;
 
 chimax=1000000000;
 % Programa que busca la k òptima per a la chi^2
-for ka1=-0.1:0.01:0.1
+for ka1=-0.10:0.001:-0.08
     setk1(ka1); 
     I2=1;
-    for ka2=-0.06:0.01:0.06
+    for ka2=-0.01:0.001:0.01
         setk2(ka2);
         chi=0;
         %Vector en los valors de la energia que necesito
