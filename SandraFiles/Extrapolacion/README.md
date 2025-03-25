@@ -1,5 +1,7 @@
 The following codes are updated after finding the errors of missing 2 in Vsb and also missing -2 in the Vhf i Vhf2 matrices. Also updated after having done the crosscheck of the way of finding the A and B errors.
-## Explanation of the files
+
+## Code for the hyperfine spectrum
+### Explanation of the files
 - `CrosscheckIntervals.m`: This code uses the theorem of Hellmann-Feynmann to check if the errors of A and B are well computed. For each state we should be able to obtain $a,b$ and they should be the same as the ones in `IntervalsConfian.m` however they are not. We have found that linearizating was wrong!
  
 $$\hat{H}|\Psi\rangle = E |\Psi\rangle \hspace{0.5cm} \rightarrow \hspace{0.5cm} E=\frac{\langle\Psi|\hat{H}|\Psi\rangle}{\langle\Psi|\Psi\rangle} = c + aA + bB \hspace{0.5cm} \rightarrow \hspace{0.5cm} \text{Theorem:} \hspace{0.5cm} \frac{\partial E}{\partial \lambda}=\frac{\langle\Psi|\frac{\partial\hat{H}}{\partial \lambda}|\Psi\rangle}{\langle\Psi|\Psi\rangle}=a,b$$
