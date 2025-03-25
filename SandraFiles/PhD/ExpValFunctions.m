@@ -13,8 +13,7 @@ function res = ExpValFunctions(x)
     end
 end
 
-
-
+%Prepares the elements
 function EV=QQComputeExpValM(i,f,M,trans,Ji,Jf)
 %With a initial al final states we compute expectations values
 %The operators of the expectation depend on M (dipion mass)
@@ -55,22 +54,17 @@ else
      Op=trans(x,Ei,Ef,M);
      Op=diag(diag(Op));
 
-     %PROBLEM WITH THE FUNCTION, x for hybrid and x for quarkonium have diferent
-     %dimension. Due to ConstrucMesh?????
-     V=ExpectedValue(i,f,Op,QuarkoniumS0Ji,QuarkoniumS0Jf,m_q,sin,sfin);
+     EV=ExpectedValue(i,f,Op,QuarkoniumS0Ji,QuarkoniumS0Jf,m_q,sin,sfin);
 
-     %Si sabem les funcions d'ona pq ens les donen i les energies utilitzem
-     %la seguent funcio
-     %V=ExpectedValueKnownWF(Wi,Wf,x,Op,s)
-
-     %Only one value is diferent from zero
-     EV=V;
-     %[row,col]=find(V);
-     %EV=V(row,col);
     end
 end
 
 end
+
+
+
+
+%IMPORTANT: I HAVE TO REWRITE THIS
 
 function EV=HQComputeExpValM(i,f,M,trans,Ji,Jf,double)
 %With a initial al final states we compute expectations values
