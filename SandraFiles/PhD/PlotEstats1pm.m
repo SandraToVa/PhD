@@ -5,8 +5,8 @@
 
 %I need to define k1, k2 and r0
 %Per al bottomonium: 
-setk1(0.03411)
-setk2(-0.00085)
+%setk1(0.03411)
+%setk2(-0.00085)
 setr0(3.964)
 setL1(0.07965)
 setL3(0.3105)
@@ -14,7 +14,6 @@ load("dades.mat","m_b","m_c")
 setm_q(m_c)
 setspin(1)
 
-[E,W,x]=Spin1Jcal0_2(m_q,spin);
 
 %I am identifing 1+- estates with the 1,2,3 estates found:
 
