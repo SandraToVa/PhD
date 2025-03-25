@@ -1,21 +1,20 @@
 
-% UPDATE: En lloc de Itheta son Ii->f. And the sign is diferent! Instead of
-% - with e^{-iphi} and + with e^{+iphi} it is - for both
-% Només ho he canviat per a (s/d)1. Quarkonium està bé.
+%IMPORTANT: This code is updated (only the quarkonium part) with the 
+% inclusion of the new operator
+
 
 %As I don't know the best way of making this type of code. This is simply a
 %document that acts as a gide of what I have to use inside the loop of
 %ComputationExpVal.m
 
-
-% Uses the functions from I_thetaFunctions.m and gives the final function
+% Uses the functions from FormFactor_ItoF.m and gives the final function
 % to compute the transition
 %Example: in l=1->l'=1 there are multiple transitions from m->m' that apear
 %in I_thetaFuntions. Here we add and obtain the final transitions l->l' in
 %terms of funcions m->m'
 
 %This functions will be called in ComputationExpVal in order to directly
-%compute the I_theta for each M
+%compute the I_ItoF (\, c, s) for each M
 
 %Create a function to call all the functions in here:
 function res = TransitionsAdded(x)
