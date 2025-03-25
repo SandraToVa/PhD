@@ -3,10 +3,7 @@ function V=ExpectedValue(i,f,Op,initial,final,m,sin,sfin)
 %#codegen
 
 %Function to compute espected values using wavefunctions and any observable
-%Output:        - Returns a vector of positions = columns of wavefunctions initial
-%               and final (if the hybrid computed is a 3x3 matrix, 3 colums, if it is a
-%               7x7 matrix, 7 columns)
-%               This vector is the expectation value of
+%Output:        - Returns the expectation value of
 %               final wavefunction * operator * initial wavefunction
 %Input:         - i=position in the spectum of eneries of the hybrid or
 %               quarkonium that we want the inital wavefunction to have
@@ -60,19 +57,17 @@ end
 %the first one
 if sin==0 && sfin ==0
     Yi_f=Yi(1,:); %row vector
-    Yf_f=Yf(1,:); %row vector
+    Yi_c=Yi_f'; %column vector
     
-    V1=Yf_f*Op;
-    V2=zeros(1,length(V1)); %row of zeros
-    for el=1:length(V1)
-        %Second auxiliar vector a row vector. Final multiplication of the
-        %Yf*Op*Yi
-        V2(el)=V1(el)*Yi_f(el);
-    end
-    %The integrand is exactly V2
-    I=V2;
-    V=trapz(x,I);
-     
+    Yf_f=Yf(1,:); %row vector
+
+    norm = Yf_f * Yi_c;
+    
+    %sandwitch wave function en operador
+    result = Yf_f * Op * Yi_c; 
+
+    V = result/norm;
+
 end %end of if
         
 %If I work with hybrid-to-qurakonium, the hybrid wave functions have 2 rows
@@ -98,6 +93,11 @@ if sin==1 && sfin==0
         %one for the bottom row (in the case of double) and the third for
         %the case of single
         OpRow=Op(:,:,N);
+
+
+%IMPORTANT: I HAVE TO REWRITE THIS AS THE ONE ABOVE FALTA DIVIDIR PER LA
+%NORMA
+
 
         %With out wavefunctions computed now we multiply for our operator
         %(matrix) Yf*Op*Yi
