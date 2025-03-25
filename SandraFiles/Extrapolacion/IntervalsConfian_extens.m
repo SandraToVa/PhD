@@ -3,6 +3,12 @@
 %Instead of computing the spectrum with the avergae values of the intervals
 %this way we compute it with the linearization
 
+% AFTER THE CROSSCHECK: 
+% The reasults are not similar enough. Linearizing the problem
+% was an error. We need to compute the errors in another way. Finding A and
+% B for lattice data +- lattice errors.
+% THis code is then NOT VALID
+
 %Valor r0
 setr0(3.964)
 setL1(0.059)
