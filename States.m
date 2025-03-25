@@ -112,7 +112,7 @@ h(5)=aux(2);
 [aux,Y0,~]=QuarkoniumS0J0(m_q,spin);
 p0=aux;
 
-%   (s/d)1 shares with p1 the script QuraknoiumS0J0
+%   (s/d)1 shares with p1 the script QuraknoiumS0J1
 [aux,Y1,~]=QuarkoniumS0J1(m_q,spin);
 %It is not straigth forwad which states are p1 os (s/d)1 so we must chek
 %We know that are (s/d)1:
@@ -122,7 +122,7 @@ sd1=aux(positionsSD1);
 positionsP1= [2, 4, 7];
 p1=aux(positionsP1);
 
-%   (p/f)2 shares with d2 the script QuraknoiumS0J0
+%   (p/f)2 shares with d2 the script QuraknoiumS0J2
 [aux,Y2,~]=QuarkoniumS0J2(m_q,spin);
 %We know that are (s/d)1:
 positionsPF2= [1, 3, 5, 6];
