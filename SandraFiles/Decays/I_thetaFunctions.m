@@ -1,4 +1,10 @@
 
+
+%CODE NOT VALID. The new version is FormFactors_ItoF
+
+
+
+
 % UPDATE: En lloc de Itheta son Ii->f. And the sign is diferent! Instead of
 % - with e^{-iphi} and + with e^{+iphi} it is - for both
 % Només ho he canviat per a (s/d)1

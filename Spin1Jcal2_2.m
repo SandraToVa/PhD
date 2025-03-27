@@ -30,7 +30,8 @@ system.V=@potentialMatrix;
 %disp(' ');
 %disp('Calculating eigenvalues with indices between 0 and 10:'); tol e-7
 t=cputime;
-[EigvData,meshData]=computeEigenvalues(system,0,5,5e-9); 
+tol=5e-9; %x=328
+[EigvData,meshData]=computeEigenvalues(system,0,5,tol); 
 
 % disp(['Number of intervals in the mesh: ' num2str(length(meshData.h))]); % number of intervals in the mesh
 %[lam0]=parameters2
@@ -207,7 +208,7 @@ function r=potentialMatrix(x) % returns the potential matrix evaluated in x
 end
 
   
-  %---------------------------------------------------------------------------------------------
+    %---------------------------------------------------------------------------------------------
 function f1=Vg(x)
   [m]=parameters;
   if m==1.4702
@@ -239,7 +240,7 @@ function f1=Vg(x)
   b1=0.0696430221609656;
   b2=-1.4593432845775876;
   a1=-0.06732994686962318;
-  a2=0.014330609468130364;  
+  a2=0.014330609468130364;
   f3=0.187*x+(0.0611/x)*(1.0+b1*x+b2*x.^2)/(1.0+a1*x+a2*x.^2)+Eo;
   end
 
@@ -276,7 +277,7 @@ function f1=Vg(x)
   [m]=parameters;
   M6=2/(x.^2)+m*Vs(x);
   end
-
+  %----------------------------------------------------------------
   
   % EFECTES HIPERFINS:
   %Corregits!!
@@ -325,7 +326,7 @@ function f1=Vg(x)
    elseif l==1 %llargues distàncies
        hevi=heaviside(sym(x) - r0);
        HF1=((Vsa/6)*(r0^3/x.^3)-(1/3)*Vsb*(r0^2/x.^2))*hevi;
-   else %Bad long distances:
+   elseif l==2 %Bad long distances:
        HF1=(Vsa/6)-(1/3)*Vsb;
    end
   end  
@@ -366,7 +367,7 @@ end
    elseif l==1 %llargues distàncies
        hevi=heaviside(sym(x) - r0);
        HF2=-(1/2)*( Vsa*(r0^3/x.^3) + Vsb*(r0^2/x.^2) )*hevi;
-   else %Bad long distances:
+   elseif l==2 %Bad long distances:
        HF2=-(1/2)*( Vsa + Vsb );
    end
   end 

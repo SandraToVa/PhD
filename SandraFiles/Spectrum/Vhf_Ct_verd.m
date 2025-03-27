@@ -1,14 +1,14 @@
 %Valor r0
 setr0(3.964)
 %Constants ajustades
-setk1(-0.018)
-setk2(0.0003)
+setk1(-0.023)
+setk2(0.0009)
 %Valors Lambda g
 setL1(0.059)
 setL3(-0.230)
 load("dades.mat","m_c","m_b")
 setm_q(m_b)
-% l= interpolació (0), llagures distncies (1), bad long distances (else)
+% l= interpolació (0), llagures distncies (1), bad long distances (2)
 setl(0)
 setspin(1) %s=1 for hybrids
 

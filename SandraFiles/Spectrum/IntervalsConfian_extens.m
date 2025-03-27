@@ -3,6 +3,12 @@
 %Instead of computing the spectrum with the avergae values of the intervals
 %this way we compute it with the linearization
 
+% AFTER THE CROSSCHECK: 
+% The reasults are not similar enough. Linearizing the problem
+% was an error. We need to compute the errors in another way. Finding A and
+% B for lattice data +- lattice errors.
+% THis code is then NOT VALID
+
 %Valor r0
 setr0(3.964)
 setL1(0.059)
@@ -10,7 +16,8 @@ setL3(-0.230)
 load("dades.mat","m_c","m_b")
 setm_q(m_c)
 setspin(1)
-% l= interpolació (0), llagures distncies (1), bad long distances (else)
+% l= interpolació (0), llagures distncies (1), bad long distances (2), Vhf
+% partial A (3), Vhf2 partial B (4)
 setl(0)
 
 %Primer calculem l'espectre en la A i B òptimes - f(i) -

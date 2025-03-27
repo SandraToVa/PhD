@@ -238,7 +238,7 @@ function f1=Vg(x)
   b1=0.0696430221609656;
   b2=-1.4593432845775876;
   a1=-0.06732994686962318;
-  a2=0.014330609468130364;  
+  a2=0.014330609468130364;
   f3=0.187*x+(0.0611/x)*(1.0+b1*x+b2*x.^2)/(1.0+a1*x+a2*x.^2)+Eo;
   end
 
@@ -248,34 +248,59 @@ function f1=Vg(x)
   
   function M1=F(x,j)
   [m]=parameters;
-  M1=(j*(j+1))/(x.^2)+m*Vp(x);
+  if l==3||l==4
+      M1=0;
+  else
+    M1=(j*(j+1))/(x.^2)+m*Vp(x);
+  end
   end
 
   function M2=R(x,j)
   [m]=parameters;
-  M2=(j*(j+1))/(x.^2)+m*Vg(x);
+  if l==3||l==4
+      M2=0;
+  else
+      M2=(j*(j+1))/(x.^2)+m*Vg(x);
+  end
   end
 
   function M3=A(x,j)
   [m]=parameters;
-  M3=(j*(j-1))/(x.^2)+m*Vq(x)*(j+1)/(2*j+1)+m*Vs(x);
+  if l==3||l==4
+      M3=0;
+  else
+      M3=(j*(j-1))/(x.^2)+m*Vq(x)*(j+1)/(2*j+1)+m*Vs(x);
+  end
   end
 
   function M4=B(x,j)
   [m]=parameters;
-  M4=m*Vq(x)*sqrt (j*(j+1))/(2*j+1);
+  if l==3||l==4
+      M4=0;
+  else
+      M4=m*Vq(x)*sqrt (j*(j+1))/(2*j+1);
+  end
   end
 
   function M5=CC(x,j)
   [m]=parameters;
-  M5=((j+1)*(j+2))/(x.^2)+m*Vq(x)*(j)/(2*j+1)+m*Vs(x);
+  if l==3||l==4
+      M5=0;
+  else
+      M5=((j+1)*(j+2))/(x.^2)+m*Vq(x)*(j)/(2*j+1)+m*Vs(x);
+  end
   end
 
   function M6=G(x,j)
   [m]=parameters;
-  M6=2/(x.^2)+m*Vs(x);
+  if l==3||l==4
+      M6=0;
+  else
+      M6=2/(x.^2)+m*Vs(x);
+  end
   end
 
+  %----------------------------------------------------------------
   
   % EFECTES HIPERFINS:
   %Corregits!!
@@ -324,8 +349,12 @@ function f1=Vg(x)
    elseif l==1 %llargues distàncies
        hevi=heaviside(sym(x) - r0);
        HF1=((Vsa/6)*(r0^3/x.^3)-(1/3)*Vsb*(r0^2/x.^2))*hevi;
-   else %Bad long distances:
+   elseif l==2 %Bad long distances:
        HF1=(Vsa/6)-(1/3)*Vsb;
+   elseif l==3 %Derivative of Vhf with respect of A
+       HF1=1./(1+(x./r0).^5);
+   elseif l==4 %Derivative of Vhf2 with respect of B (Vhf doen't change)
+       HF1=0;
    end
   end  
   
@@ -365,8 +394,12 @@ end
    elseif l==1 %llargues distàncies
        hevi=heaviside(sym(x) - r0);
        HF2=-(1/2)*( Vsa*(r0^3/x.^3) + Vsb*(r0^2/x.^2) )*hevi;
-   else %Bad long distances:
+   elseif l==2 %Bad long distances:
        HF2=-(1/2)*( Vsa + Vsb );
+   elseif l==3 %Derivative of Vhf with respect of A (Vhf2 doen't change)
+       HF2=0;
+   elseif l==4 %Derivative of Vhf2 with respect of B 
+       HF2=(x.^2) ./ (1+(x./r0).^7);
    end
   end 
   

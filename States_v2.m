@@ -9,7 +9,8 @@ setk2(0.00385)
 %Valors Lambda g
 setL1(0.07965)
 setL3(0.3105)
-% l= interpolació (0), llagures distncies (1), bad long distances (else)
+% l= interpolació (0), llagures distncies (1), bad long distances (2), Vhf
+% partial A (3), Vhf2 partial B (4)
 setl(0)
 %massa
 load("dades.mat","m_c","m_b")
