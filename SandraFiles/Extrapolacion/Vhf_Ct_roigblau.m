@@ -1,13 +1,12 @@
 %Valor r0
 setr0(3.964)
 %Constants ajustades
-setk1(-0.0132)
-setk2(-0.0017)
+setk1(-0.023)
+setk2(0.0009)
 %Valors Lambda g
 setL1(0.059)
 setL3(-0.230)
-% l= interpolació (0), llagures distncies (1), bad long distances (2), Vhf
-% partial A (3), Vhf2 partial B (4)
+% l= interpolació (0), llagures distncies (1), bad long distances (2)
 setl(0)
 %massa
 load("dades.mat","m_c","m_b")
@@ -94,7 +93,29 @@ chi=0;
 chi;  %Per al bottom el valor de chi no te sentit pq les dade steoriques son del c
 end
 
-a;
+%Final value ordered:
+%(s/d)1
+res(1)=a(1);
+res(2)=a(2);
+res(3)=a(3);
+res(4)=a(4);
+%(p1)
+res(5)=a(12);
+res(6)=a(5);
+res(7)=a(9);
+res(8)=a(6);
+%(p/f)2
+res(9)=a(13);
+res(10)=a(10);
+res(11)=a(7);
+res(12)=a(14);
+%p0
+res(13)=a(8);
+res(14)=a(11);
+
+
+
+
 
 %VALOR DE LA MASSA
 %m=1.4702; charm

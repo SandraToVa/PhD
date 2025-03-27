@@ -50,7 +50,7 @@ e(14)=0.0346;
 % was an error. We need to compute the errors in another way. Finding A and
 % B for lattice data +- lattice errors.
 % Calcul de A+ i B+
-t=t-e;
+%t=t-e;
 
 I1=1;
 I2=1; 
@@ -58,10 +58,10 @@ results(I1,I2)=0;
 
 chimax=1000000000;
 % Programa que busca la k òptima per a la chi^2
-for ka1=-0.10:0.001:-0.08
+for ka1=-0.096:0.0001:-0.094
     setk1(ka1); 
     I2=1;
-    for ka2=-0.01:0.001:0.01
+    for ka2=0.001:0.0001:0.003
         setk2(ka2);
         chi=0;
         %Vector en los valors de la energia que necesito
